@@ -1,0 +1,21 @@
+{
+  "include": ["src"],
+  "exclude": ["src/**/*.test.ts", "src/**/test/*"],
+  "compilerOptions": {
+    "baseUrl": "src",
+    "rootDir": "src",
+    "outDir": "lib",
+
+    "target": "es2017",
+    "module": "commonjs",
+    "lib": ["es2020"],
+    "declaration": true,
+    "declarationMap": true,
+
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true
+  }
+}
