@@ -1,4 +1,4 @@
-import { AnyBuffer, GetRange, parseBigInt } from 'utils'
+import { Binary, GetRange, parseBigInt } from 'utils'
 
 import { hierarchyItemLength } from './constants'
 import { Key } from './key'
@@ -21,8 +21,8 @@ export declare namespace Hierarchy {
 export type Hierarchy = { [key: string]: Hierarchy.Item | undefined }
 export const Hierarchy = { parse, maybeLoad, loadPage }
 
-function parse(buffer: AnyBuffer): Hierarchy {
-  const dv = AnyBuffer.toDataView(buffer)
+function parse(buffer: Binary): Hierarchy {
+  const dv = Binary.toDataView(buffer)
   if (dv.byteLength % hierarchyItemLength !== 0) {
     throw new Error(`Invalid hierarchy page length: ${dv.byteLength}`)
   }

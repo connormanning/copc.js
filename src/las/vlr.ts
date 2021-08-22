@@ -1,4 +1,4 @@
-import { AnyBuffer, GetRange, parseBigInt } from 'utils'
+import { Binary, GetRange, parseBigInt } from 'utils'
 
 import { Header } from './header'
 import { evlrHeaderLength, headerLength, vlrHeaderLength } from './constants'
@@ -32,12 +32,12 @@ export async function walk(header: Header, get: GetRange) {
   ]
 }
 
-function parse(buffer: AnyBuffer, isExtended?: boolean) {
+function parse(buffer: Binary, isExtended?: boolean) {
   return (isExtended ? parseExtended : parseNormal)(buffer)
 }
 
-function parseNormal(buffer: AnyBuffer): VlrWithoutOffset {
-  const dv = AnyBuffer.toDataView(buffer)
+function parseNormal(buffer: Binary): VlrWithoutOffset {
+  const dv = Binary.toDataView(buffer)
   if (dv.byteLength !== vlrHeaderLength) {
     throw new Error(
       `Invalid VLR header length (must be ${vlrHeaderLength}): ${dv.byteLength}`
@@ -45,16 +45,16 @@ function parseNormal(buffer: AnyBuffer): VlrWithoutOffset {
   }
 
   return {
-    userId: AnyBuffer.toString(AnyBuffer.slice(dv, 2, 18)),
+    userId: Binary.toCString(buffer.slice(2, 18)),
     recordId: dv.getUint16(18, true),
     contentLength: dv.getUint16(20, true),
-    description: AnyBuffer.toString(AnyBuffer.slice(dv, 22, 54)),
+    description: Binary.toCString(buffer.slice(22, 54)),
     isExtended: false,
   }
 }
 
-function parseExtended(buffer: AnyBuffer): VlrWithoutOffset {
-  const dv = AnyBuffer.toDataView(buffer)
+function parseExtended(buffer: Binary): VlrWithoutOffset {
+  const dv = Binary.toDataView(buffer)
   if (dv.byteLength !== evlrHeaderLength) {
     throw new Error(
       `Invalid EVLR header length (must be ${evlrHeaderLength}): ${dv.byteLength}`
@@ -62,10 +62,10 @@ function parseExtended(buffer: AnyBuffer): VlrWithoutOffset {
   }
 
   return {
-    userId: AnyBuffer.toString(AnyBuffer.slice(dv, 2, 18)),
+    userId: Binary.toCString(buffer.slice(2, 18)),
     recordId: dv.getUint16(18, true),
     contentLength: parseBigInt(dv.getBigUint64(20, true)),
-    description: AnyBuffer.toString(AnyBuffer.slice(dv, 28, 60)),
+    description: Binary.toCString(buffer.slice(28, 60)),
     isExtended: true,
   }
 }

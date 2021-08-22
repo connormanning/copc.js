@@ -7,7 +7,7 @@ const filename = ellipsoidFilename
 const getter = getGetter(filename)
 
 test('offsets', async () => {
-  const copc = await Copc.walk(getter)
+  const copc = await Copc.create(getter)
 
   const buffer = await getter(
     copc.offsets.rootHierarchyOffset,

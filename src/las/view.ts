@@ -1,4 +1,4 @@
-import { AnyBuffer } from 'utils'
+import { Binary } from 'utils'
 import * as Utils from 'utils'
 
 import { Extractor } from './extractor'
@@ -6,9 +6,9 @@ import { Header } from './header'
 
 export const View = { create }
 
-function create(header: Header, buffer: AnyBuffer): Utils.View {
+function create(header: Header, buffer: Binary): Utils.View {
   const extractors = Extractor.create(header)
-  const dv = AnyBuffer.toDataView(buffer)
+  const dv = Binary.toDataView(buffer)
 
   const pointLength = header.pointDataRecordLength
 

@@ -1,6 +1,6 @@
 import Module from 'laz-perf'
 
-import { AnyBuffer } from 'utils'
+import { Binary } from 'utils'
 
 import { Header } from './header'
 
@@ -17,9 +17,9 @@ type ChunkMetadata = Pick<
 >
 
 export async function decompress(
-  compressed: AnyBuffer,
+  compressed: Binary,
   { pointCount, pointDataRecordFormat, pointDataRecordLength }: ChunkMetadata
-): Promise<DataView> {
+): Promise<Binary> {
   const outBuffer = new Uint8Array(pointCount * pointDataRecordLength)
 
   while (!isReady) await new Promise((resolve) => setTimeout(resolve, 5))
@@ -58,9 +58,5 @@ export async function decompress(
     decoder.delete()
   }
 
-  return new DataView(
-    outBuffer.buffer,
-    outBuffer.byteOffset,
-    outBuffer.byteLength
-  )
+  return outBuffer
 }

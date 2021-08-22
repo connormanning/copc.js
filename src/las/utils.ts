@@ -1,5 +1,8 @@
+import { Binary } from 'utils'
+
 export type Point = [number, number, number]
-export function parsePoint(dv: DataView): Point {
+export function parsePoint(buffer: Binary): Point {
+  const dv = Binary.toDataView(buffer)
   if (dv.byteLength !== 24) {
     throw new Error(`Invalid tuple buffer length: ${dv.byteLength}`)
   }
@@ -10,7 +13,8 @@ export function parsePoint(dv: DataView): Point {
   ]
 }
 
-export function formatGuid(dv: DataView): string {
+export function formatGuid(buffer: Binary): string {
+  const dv = Binary.toDataView(buffer)
   if (dv.byteLength !== 16) {
     throw new Error(`Invalid GUID buffer length: ${dv.byteLength}`)
   }

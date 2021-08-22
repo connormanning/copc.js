@@ -11,8 +11,7 @@ export type Copc = {
   offsets: Offsets
   hierarchy: Hierarchy
 }
-// TODO: Remove "walk" from this.
-export const Copc = { walk: create, create, loadPointData }
+export const Copc = { create, loadPointData }
 
 /**
  * Parse the COPC header and walk VLR and EVLR metadata.

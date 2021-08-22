@@ -1,11 +1,9 @@
-import { AnyBuffer } from './any-buffer'
-
+export { Binary } from './binary'
 export { Extractor } from './extractor'
 export { Scale } from './scale'
 export { View } from './view'
 
-export { AnyBuffer }
-export type GetRange = (begin: number, end: number) => Promise<AnyBuffer>
+export type GetRange = (begin: number, end: number) => Promise<Uint8Array>
 
 export function parseBigInt(v: BigInt) {
   if (

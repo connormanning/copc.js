@@ -1,4 +1,4 @@
-import { AnyBuffer, parseBigInt } from 'utils'
+import { Binary, parseBigInt } from 'utils'
 
 import { offsetsLength } from './constants'
 
@@ -15,8 +15,8 @@ export type Offsets = {
 }
 export const Offsets = { parse }
 
-function parse(buffer: AnyBuffer): Offsets {
-	const dv = AnyBuffer.toDataView(buffer)
+function parse(buffer: Binary): Offsets {
+	const dv = Binary.toDataView(buffer)
 
   if (dv.byteLength !== offsetsLength) {
     throw new Error(
