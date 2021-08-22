@@ -1,4 +1,4 @@
-import { Binary, GetRange, parseBigInt } from 'utils'
+import { Binary, Getter, parseBigInt } from 'utils'
 
 import { hierarchyItemLength } from './constants'
 import { Key } from './key'
@@ -54,22 +54,24 @@ function parse(buffer: Binary): Hierarchy {
 }
 
 async function loadPage(
-  item: Hierarchy.Lazy,
-  get: GetRange
+  filename: string | Getter,
+  item: Hierarchy.Lazy
 ): Promise<Hierarchy> {
+  const get = Getter.create(filename)
   return parse(await get(item.pageOffset, item.pageOffset + item.pageLength))
 }
 
 async function maybeLoad(
+  filename: string | Getter,
   hierarchy: Hierarchy,
-  key: Key | string,
-  get: GetRange
+  key: Key | string
 ): Promise<Hierarchy | undefined> {
+  const get = Getter.create(filename)
   const { [Key.toString(key)]: item } = hierarchy
 
   if (!item) throw new Error(`Hierarchy item is not loaded: ${key.toString()}`)
   if (item.type === 'page') return
-  if (item.type === 'lazy') return loadPage(item, get)
+  if (item.type === 'lazy') return loadPage(get, item)
 
   throw new Error(`Invalid hierarchy item type`)
 }

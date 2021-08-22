@@ -1,17 +1,16 @@
 import { Forager } from 'forager'
 
-import { ellipsoidFilename, getGetter } from 'test'
+import { ellipsoidFilename } from 'test'
 
 import { Header, Vlr } from '.'
 
 const filename = ellipsoidFilename
-const getter = getGetter(filename)
 
 test('walk', async () => {
   const buffer = await Forager.read(filename, { range: [0, 375] })
   const header = Header.parse(buffer)
 
-  const vlrs = await Vlr.walk(header, getter)
+  const vlrs = await Vlr.walk(filename, header)
   expect(vlrs).toEqual<Vlr[]>([
     {
       userId: 'entwine',

@@ -1,9 +1,8 @@
 export { Binary } from './binary'
 export { Extractor } from './extractor'
+export { Getter } from './getter'
 export { Scale } from './scale'
 export { View } from './view'
-
-export type GetRange = (begin: number, end: number) => Promise<Uint8Array>
 
 export function parseBigInt(v: BigInt) {
   if (

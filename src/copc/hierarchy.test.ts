@@ -1,15 +1,16 @@
-import { ellipsoidFilename, getGetter } from 'test'
+import { Getter } from 'utils'
+import { ellipsoidFilename } from 'test'
 
 import { Copc } from './copc'
 import { Hierarchy } from './hierarchy'
 
 const filename = ellipsoidFilename
-const getter = getGetter(filename)
+const get = Getter.create(filename)
 
 test('offsets', async () => {
-  const copc = await Copc.create(getter)
+  const copc = await Copc.create(filename)
 
-  const buffer = await getter(
+  const buffer = await get(
     copc.offsets.rootHierarchyOffset,
     copc.offsets.rootHierarchyOffset + copc.offsets.rootHierarchyLength
   )

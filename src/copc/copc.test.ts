@@ -1,13 +1,13 @@
-import { ellipsoidFilename, getGetter } from 'test'
+import { ellipsoidFilename } from 'test'
 
 import { Copc } from '.'
 
 const filename = ellipsoidFilename
-const getter = getGetter(filename)
+// const getter = getGetter(filename)
 
 test('data', async () => {
-  const copc = await Copc.create(getter)
-	const view = await Copc.loadPointData(copc, '0-0-0-0', getter)
+  const copc = await Copc.create(filename)
+	const view = await Copc.loadPointData(filename, copc, '0-0-0-0')
 	const xyz = ['X', 'Y', 'Z'].map(view.getter)
 
   let min = [Infinity, Infinity, Infinity]

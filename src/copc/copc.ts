@@ -1,5 +1,5 @@
 import * as Las from 'las'
-import { GetRange, View } from 'utils'
+import { Getter, View } from 'utils'
 
 import { Hierarchy } from './hierarchy'
 import { Key } from './key'
@@ -16,9 +16,10 @@ export const Copc = { create, loadPointData }
 /**
  * Parse the COPC header and walk VLR and EVLR metadata.
  */
-async function create(get: GetRange): Promise<Copc> {
+async function create(filename: string | Getter): Promise<Copc> {
+  const get = Getter.create(filename)
   const header = Las.Header.parse(await get(0, Las.Constants.headerLength))
-  const vlrs = await Las.Vlr.walk(header, get)
+  const vlrs = await Las.Vlr.walk(get, header)
 
   const copcVlr = vlrs.find((v) => v.userId === 'entwine' && v.recordId === 1)
   if (!copcVlr) throw new Error('COPC VLR is required')
@@ -39,12 +40,14 @@ async function create(get: GetRange): Promise<Copc> {
 }
 
 async function loadPointData(
+  filename: string | Getter,
   copc: Copc,
-  key: Key | string,
-  get: GetRange
+  key: Key | string
 ): Promise<View> {
+  const get = Getter.create(filename)
+
   // Ensure that the hierarchy entry for this node is loaded.
-  const page = await Hierarchy.maybeLoad(copc.hierarchy, key, get)
+  const page = await Hierarchy.maybeLoad(get, copc.hierarchy, key)
   if (page) copc.hierarchy = { ...copc.hierarchy, ...page }
 
   // Grab the hierarchy data for this entry.

@@ -1,17 +1,16 @@
 import { Forager } from 'forager'
 
 import { Header, Vlr } from 'las'
-import { ellipsoidFilename, getGetter } from 'test'
+import { ellipsoidFilename } from 'test'
 
 import { Offsets } from './offsets'
 
 const filename = ellipsoidFilename
-const getter = getGetter(filename)
 
 test('offsets', async () => {
   const hbuffer = await Forager.read(filename, { range: [0, 375] })
   const header = Header.parse(hbuffer)
-  const vlrs = await Vlr.walk(header, getter)
+  const vlrs = await Vlr.walk(filename, header)
 
   const copcVlr = vlrs.find((v) => v.userId === 'entwine' && v.recordId === 1)
   if (!copcVlr) throw new Error('COPC VLR is required')

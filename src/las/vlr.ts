@@ -1,4 +1,4 @@
-import { Binary, GetRange, parseBigInt } from 'utils'
+import { Binary, Getter, parseBigInt } from 'utils'
 
 import { Header } from './header'
 import { evlrHeaderLength, headerLength, vlrHeaderLength } from './constants'
@@ -15,7 +15,8 @@ export type Vlr = {
 type VlrWithoutOffset = Omit<Vlr, 'contentOffset'>
 export const Vlr = { walk, parse }
 
-export async function walk(header: Header, get: GetRange) {
+export async function walk(filename: string | Getter, header: Header) {
+  const get = Getter.create(filename)
   return [
     ...(await doWalk({
       get,
@@ -71,7 +72,7 @@ function parseExtended(buffer: Binary): VlrWithoutOffset {
 }
 
 type DoWalk = {
-  get: GetRange
+  get: Getter
   startOffset: number
   count: number
   isExtended: boolean
