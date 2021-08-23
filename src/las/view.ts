@@ -1,6 +1,7 @@
 import { Binary } from 'utils'
 import * as Utils from 'utils'
 
+import { Dimensions } from './dimensions'
 import { Extractor } from './extractor'
 import { Header } from './header'
 
@@ -8,6 +9,7 @@ export const View = { create }
 
 function create(header: Header, buffer: Binary): Utils.View {
   const extractors = Extractor.create(header)
+  const dimensions = Dimensions.create(extractors)
   const dv = Binary.toDataView(buffer)
 
   const pointLength = header.pointDataRecordLength
@@ -31,5 +33,5 @@ function create(header: Header, buffer: Binary): Utils.View {
       return extractor(dv, index)
     }
   }
-  return { pointCount, getter }
+  return { pointCount, dimensions, getter }
 }

@@ -1,4 +1,10 @@
+import { Dimension } from './dimension'
+
 export declare namespace View {
-  type Getter = (index: number) => number
+  export type Getter = (index: number) => number
 }
-export type View = { pointCount: number; getter: (name: string) => View.Getter }
+export type View = {
+  pointCount: number
+  dimensions: Dimension.Map
+  getter: (name: string) => View.Getter
+}

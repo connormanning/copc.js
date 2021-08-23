@@ -73,7 +73,7 @@ function create0(header: PartialHeader): ExtractorType.Map {
     Withheld: (dv, index) =>
       (getFullClassification(dv, index) & 0b1000_0000) >> 7,
     Overlap: (dv, index) => (getClassification(dv, index) === 12 ? 1 : 0),
-    ScanAngleRank: (dv, index) => dv.getInt8(getPointOffset(index) + 16),
+    ScanAngle: (dv, index) => dv.getInt8(getPointOffset(index) + 16),
     UserData: (dv, index) => dv.getUint8(getPointOffset(index) + 17),
     PointSourceId: (dv, index) =>
       dv.getUint16(getPointOffset(index) + 18, true),

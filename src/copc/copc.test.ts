@@ -1,5 +1,6 @@
 import { ellipsoidFilename } from 'test'
 
+import { Dimension } from 'utils'
 import { Copc } from '.'
 
 const filename = ellipsoidFilename
@@ -7,6 +8,29 @@ const filename = ellipsoidFilename
 test('data', async () => {
   const copc = await Copc.create(filename)
   const view = await Copc.loadPointData(filename, copc, '0-0-0-0')
+
+  expect(view.dimensions).toEqual<Dimension.Map>({
+    X: { type: 'float', size: 8 },
+    Y: { type: 'float', size: 8 },
+    Z: { type: 'float', size: 8 },
+    Intensity: { type: 'unsigned', size: 2 },
+    ReturnNumber: { type: 'unsigned', size: 1 },
+    NumberOfReturns: { type: 'unsigned', size: 1 },
+    ScanDirectionFlag: { type: 'unsigned', size: 1 },
+    EdgeOfFlightLine: { type: 'unsigned', size: 1 },
+    Classification: { type: 'unsigned', size: 1 },
+    Synthetic: { type: 'unsigned', size: 1 },
+    KeyPoint: { type: 'unsigned', size: 1 },
+    Withheld: { type: 'unsigned', size: 1 },
+    Overlap: { type: 'unsigned', size: 1 },
+    ScanAngle: { type: 'float', size: 4 },
+    UserData: { type: 'unsigned', size: 1 },
+    PointSourceId: { type: 'unsigned', size: 2 },
+    GpsTime: { type: 'float', size: 8 },
+    Red: { type: 'unsigned', size: 2 },
+    Green: { type: 'unsigned', size: 2 },
+    Blue: { type: 'unsigned', size: 2 },
+  })
   const xyz = [view.getter('X'), view.getter('Y'), view.getter('Z')]
 
   let min = [Infinity, Infinity, Infinity]

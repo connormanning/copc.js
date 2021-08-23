@@ -1,4 +1,5 @@
 export { Binary } from './binary'
+export { Dimension } from './dimension'
 export { Extractor } from './extractor'
 export { Getter } from './getter'
 export { Scale } from './scale'
