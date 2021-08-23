@@ -9,17 +9,17 @@ export declare namespace Hierarchy {
     pageOffset: number
     pageLength: number
   }
-  export type Page = {
-    type: 'page'
+  export type Node = {
+    type: 'node'
     pointCount: number
     pointDataOffset: number
     pointDataLength: number
   }
 
-  export type Item = Lazy | Page
+  export type Item = Lazy | Node
 }
 export type Hierarchy = { [key: string]: Hierarchy.Item | undefined }
-export const Hierarchy = { parse, maybeLoad, loadPage }
+export const Hierarchy = { parse, loadPage, maybeLoadPage }
 
 function parse(buffer: Binary): Hierarchy {
   const dv = Binary.toDataView(buffer)
@@ -39,11 +39,15 @@ function parse(buffer: Binary): Hierarchy {
 
     const key = Key.toString([d, x, y, z])
 
+    if (pointCount < -1) {
+      throw new Error(`Invalid hierarchy point count at key: ${key}`)
+    }
+
     hierarchy[key] =
       pointCount === -1
         ? { type: 'lazy', pageOffset: offset, pageLength: length }
         : {
-            type: 'page',
+            type: 'node',
             pointCount,
             pointDataOffset: offset,
             pointDataLength: length,
@@ -61,7 +65,7 @@ async function loadPage(
   return parse(await get(item.pageOffset, item.pageOffset + item.pageLength))
 }
 
-async function maybeLoad(
+async function maybeLoadPage(
   filename: string | Getter,
   hierarchy: Hierarchy,
   key: Key | string
@@ -70,7 +74,7 @@ async function maybeLoad(
   const { [Key.toString(key)]: item } = hierarchy
 
   if (!item) throw new Error(`Hierarchy item is not loaded: ${key.toString()}`)
-  if (item.type === 'page') return
+  if (item.type === 'node') return
   if (item.type === 'lazy') return loadPage(get, item)
 
   throw new Error(`Invalid hierarchy item type`)

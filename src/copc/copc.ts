@@ -11,7 +11,7 @@ export type Copc = {
   offsets: Offsets
   hierarchy: Hierarchy
 }
-export const Copc = { create, loadPointData }
+export const Copc = { create, loadPointData, loadHierarchyPage }
 
 /**
  * Parse the COPC header and walk VLR and EVLR metadata.
@@ -39,6 +39,20 @@ async function create(filename: string | Getter): Promise<Copc> {
   return { header, vlrs, offsets, hierarchy }
 }
 
+async function loadHierarchyPage(
+  filename: string | Getter,
+  copc: Copc,
+  key: Key | string = '0-0-0-0'
+) {
+  const get = Getter.create(filename)
+  const keystring = Key.toString(key)
+  const { [keystring]: item } = copc.hierarchy
+  if (!item || item.type !== 'lazy') {
+    throw new Error(`Invalid hierarchy load request for key ${keystring}`)
+  }
+  return Hierarchy.loadPage(get, item)
+}
+
 async function loadPointData(
   filename: string | Getter,
   copc: Copc,
@@ -47,14 +61,15 @@ async function loadPointData(
   const get = Getter.create(filename)
 
   // Ensure that the hierarchy entry for this node is loaded.
-  const page = await Hierarchy.maybeLoad(get, copc.hierarchy, key)
+  const page = await Hierarchy.maybeLoadPage(get, copc.hierarchy, key)
   if (page) copc.hierarchy = { ...copc.hierarchy, ...page }
 
   // Grab the hierarchy data for this entry.
-  const { [Key.toString(key)]: item } = copc.hierarchy
-  if (!item || item.type !== 'page') {
+  const keystring = Key.toString(key)
+  const { [keystring]: item } = copc.hierarchy
+  if (!item || item.type !== 'node') {
     throw new Error(
-      `Cannot get point data - hierarchy not loaded: ${Key.toString(key)}`
+      `Cannot get point data - hierarchy not loaded: ${keystring}`
     )
   }
 

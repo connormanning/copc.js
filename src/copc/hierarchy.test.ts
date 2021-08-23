@@ -17,31 +17,31 @@ test('offsets', async () => {
   const root = Hierarchy.parse(buffer)
   expect(root).toEqual<Hierarchy>({
     '0-0-0-0': {
-      type: 'page',
+      type: 'node',
       pointCount: 41179,
       pointDataOffset: 1438,
       pointDataLength: 231998,
     },
     '1-0-0-0': {
-      type: 'page',
+      type: 'node',
       pointCount: 264,
       pointDataOffset: 233436,
       pointDataLength: 2219,
     },
     '1-1-0-0': {
-      type: 'page',
+      type: 'node',
       pointCount: 12332,
       pointDataOffset: 235655,
       pointDataLength: 94658,
     },
     '1-0-1-0': {
-      type: 'page',
+      type: 'node',
       pointCount: 4558,
       pointDataOffset: 330313,
       pointDataLength: 34859,
     },
     '1-1-1-0': {
-      type: 'page',
+      type: 'node',
       pointCount: 4678,
       pointDataOffset: 365172,
       pointDataLength: 35103,
