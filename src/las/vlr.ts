@@ -85,9 +85,19 @@ async function doWalk({ get, startOffset, count, isExtended }: DoWalk) {
 
   for (let i = 0; i < count; ++i) {
     const buffer = await get(pos, pos + length)
-    const vlr = parse(buffer, isExtended)
-    vlrs.push({ ...vlr, contentOffset: pos + length })
-    pos += length + vlr.contentLength
+    const { userId, recordId, contentLength, description } = parse(
+      buffer,
+      isExtended
+    )
+    vlrs.push({
+      userId,
+      recordId,
+      contentOffset: pos + length,
+      contentLength,
+      description,
+      isExtended,
+    })
+    pos += length + contentLength
   }
 
   return vlrs

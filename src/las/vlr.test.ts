@@ -15,34 +15,34 @@ test('walk', async () => {
     {
       userId: 'entwine',
       recordId: 1,
+      contentOffset: 429,
       contentLength: 160,
       description: 'COPC offsets',
       isExtended: false,
-      contentOffset: 429,
     },
     {
       userId: 'laszip encoded',
       recordId: 22204,
+      contentOffset: 643,
       contentLength: 52,
       description: 'lazperf variant',
       isExtended: false,
-      contentOffset: 643,
     },
     {
       userId: 'LASF_Projection',
       recordId: 2112,
+      contentOffset: 749,
       contentLength: 681,
       description: '',
       isExtended: false,
-      contentOffset: 749,
     },
     {
       userId: 'entwine',
       recordId: 1000,
+      contentOffset: 400368,
       contentLength: 160,
       description: 'EPT Hierarchy',
       isExtended: true,
-      contentOffset: 400368,
     },
   ])
 })
