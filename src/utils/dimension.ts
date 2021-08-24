@@ -11,7 +11,7 @@ export declare namespace Dimension {
 export type Dimension = Dimension.Integral | Dimension.Float
 
 export declare namespace Dimension {
-  export type Map = { [name: string]: Dimension }
+  export type Map = { [name: string]: Dimension | undefined }
 }
 
 const Type = {

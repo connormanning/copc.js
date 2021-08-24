@@ -15,7 +15,7 @@ export type Vlr = {
 type VlrWithoutOffset = Omit<Vlr, 'contentOffset'>
 export const Vlr = { walk, parse }
 
-export async function walk(filename: string | Getter, header: Header) {
+async function walk(filename: string | Getter, header: Header) {
   const get = Getter.create(filename)
   return [
     ...(await doWalk({

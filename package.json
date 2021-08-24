@@ -4,7 +4,7 @@
   "version": "0.0.2",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc --project tsconfig.production.json",
+    "build": "ttsc --project tsconfig.production.json",
     "prepare": "yarn build",
     "test": "jest"
   },
@@ -14,6 +14,7 @@
     "@types/jest": "^27.0.1",
     "@types/node": "^16.6.1",
     "@types/node-fetch": "^2.5.12",
+    "@zerollup/ts-transform-paths": "^1.7.18",
     "forager": "^0.0.8",
     "husky": "^7.0.1",
     "jest": "^27.0.6",
@@ -21,6 +22,7 @@
     "pretty-quick": "^3.1.1",
     "ts-jest": "^27.0.5",
     "ts-node": "^10.2.0",
+    "ttypescript": "^1.5.12",
     "typescript": "^4.3.5"
   },
   "husky": {

@@ -15,6 +15,7 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "noImplicitAny": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "plugins": [{ "transform": "@zerollup/ts-transform-paths" }]
   }
 }
