@@ -17,20 +17,19 @@ export const Vlr = { walk, parse }
 
 async function walk(filename: string | Getter, header: Header) {
   const get = Getter.create(filename)
-  return [
-    ...(await doWalk({
-      get,
-      startOffset: headerLength,
-      count: header.vlrCount,
-      isExtended: false,
-    })),
-    ...(await doWalk({
-      get,
-      startOffset: header.evlrOffset,
-      count: header.evlrCount,
-      isExtended: true,
-    })),
-  ]
+  const vlrs = await doWalk({
+    get,
+    startOffset: headerLength,
+    count: header.vlrCount,
+    isExtended: false,
+  })
+  const evlrs = await doWalk({
+    get,
+    startOffset: header.evlrOffset,
+    count: header.evlrCount,
+    isExtended: true,
+  })
+  return [...vlrs, ...evlrs]
 }
 
 function parse(buffer: Binary, isExtended?: boolean) {
