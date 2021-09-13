@@ -1,5 +1,5 @@
-import * as Las from 'las'
-import { Getter, View } from 'utils'
+import * as Las from '../las'
+import { Getter, View } from '../utils'
 
 import { Hierarchy } from './hierarchy'
 import { Key } from './key'

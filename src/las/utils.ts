@@ -1,4 +1,4 @@
-import { Binary } from 'utils'
+import { Binary } from '../utils'
 
 export type Point = [number, number, number]
 export function parsePoint(buffer: Binary): Point {

@@ -1,4 +1,4 @@
-import { Binary, Getter, parseBigInt } from 'utils'
+import { Binary, Getter, parseBigInt } from '../utils'
 
 import { Header } from './header'
 import { evlrHeaderLength, headerLength, vlrHeaderLength } from './constants'

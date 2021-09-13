@@ -1,4 +1,4 @@
-import { Binary, parseBigInt } from 'utils'
+import { Binary, parseBigInt } from '../utils'
 
 import { offsetsLength } from './constants'
 

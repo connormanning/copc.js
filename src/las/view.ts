@@ -1,5 +1,5 @@
-import { Binary } from 'utils'
-import * as Utils from 'utils'
+import { Binary } from '../utils'
+import * as Utils from '../utils'
 
 import { Dimensions } from './dimensions'
 import { Extractor } from './extractor'

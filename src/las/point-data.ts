@@ -1,6 +1,6 @@
-import Module from 'laz-perf'
+import Module from '../laz-perf'
 
-import { Binary } from 'utils'
+import { Binary } from '../utils'
 
 import { Header } from './header'
 
