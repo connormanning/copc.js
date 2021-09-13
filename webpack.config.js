@@ -22,8 +22,8 @@ module.exports = () => [{
     new CopyPlugin({
       patterns: [
         {
-          from: "./src/laz-perf/laz-perf.wasm",
-          to: "./web",
+          from: "./src/laz-perf",
+          to: "./web/laz-perf",
         }
       ]
     })
