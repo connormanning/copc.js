@@ -7,7 +7,7 @@ const filename = ellipsoidFilename
 
 test('data', async () => {
   const copc = await Copc.create(filename)
-  const view = await Copc.loadPointData(filename, copc, '0-0-0-0')
+  const view = await Copc.loadPointDataView(filename, copc, '0-0-0-0')
 
   expect(view.dimensions).toEqual<Dimension.Map>({
     X: { type: 'float', size: 8 },
