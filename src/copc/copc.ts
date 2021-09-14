@@ -1,5 +1,5 @@
 import * as Las from 'las'
-import { Getter, View } from 'utils'
+import { Getter, View, Binary } from 'utils'
 
 import { Hierarchy } from './hierarchy'
 import { Key } from './key'
@@ -11,7 +11,7 @@ export type Copc = {
   offsets: Offsets
   hierarchy: Hierarchy
 }
-export const Copc = { create, loadPointData, loadHierarchyPage }
+export const Copc = { create, loadPointData, loadPointDataView, loadHierarchyPage }
 
 /**
  * Parse the COPC header and walk VLR and EVLR metadata.
@@ -57,7 +57,7 @@ async function loadPointData(
   filename: string | Getter,
   copc: Copc,
   key: Key | string
-): Promise<View> {
+): Promise<Binary> {
   const get = Getter.create(filename)
 
   // Ensure that the hierarchy entry for this node is loaded.
@@ -87,5 +87,13 @@ async function loadPointData(
     pointCount,
   })
 
-  return Las.View.create(copc.header, buffer)
+  return buffer
+}
+
+async function loadPointDataView(
+  filename: string | Getter,
+  copc: Copc,
+  key: Key | string
+): Promise<View> {
+  return Las.View.create(copc.header, (await loadPointData(filename, copc, key)));
 }
