@@ -1,7 +1,7 @@
-import { Binary, parseBigInt } from 'utils'
+import { Binary, Point, parseBigInt } from 'utils'
 
 import { headerLength } from './constants'
-import { Point, formatGuid, parsePoint } from './utils'
+import { formatGuid, parsePoint } from './utils'
 
 export declare namespace Header {}
 export type Header = {

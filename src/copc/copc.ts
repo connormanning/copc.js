@@ -1,8 +1,7 @@
 import * as Las from 'las'
-import { Getter, View } from 'utils'
+import { Getter, Key, View } from 'utils'
 
 import { Hierarchy } from './hierarchy'
-import { Key } from './key'
 import { Offsets } from './offsets'
 
 export type Copc = {
@@ -45,12 +44,8 @@ async function loadHierarchyPage(
   key: Key | string = '0-0-0-0'
 ) {
   const get = Getter.create(filename)
-  const keystring = Key.toString(key)
-  const { [keystring]: item } = copc.hierarchy
-  if (!item || item.type !== 'lazy') {
-    throw new Error(`Invalid hierarchy load request for key ${keystring}`)
-  }
-  return Hierarchy.loadPage(get, item)
+  const page = await Hierarchy.maybeLoadPage(get, copc.hierarchy, key)
+  copc.hierarchy = Hierarchy.merge(copc.hierarchy, key, page)
 }
 
 async function loadPointData(
@@ -62,12 +57,12 @@ async function loadPointData(
 
   // Ensure that the hierarchy entry for this node is loaded.
   const page = await Hierarchy.maybeLoadPage(get, copc.hierarchy, key)
-  if (page) copc.hierarchy = { ...copc.hierarchy, ...page }
+  copc.hierarchy = Hierarchy.merge(copc.hierarchy, key, page)
 
   // Grab the hierarchy data for this entry.
   const keystring = Key.toString(key)
   const { [keystring]: item } = copc.hierarchy
-  if (!item || item.type !== 'node') {
+  if (!item || item.type === 'lazy') {
     throw new Error(
       `Cannot get point data - hierarchy not loaded: ${keystring}`
     )

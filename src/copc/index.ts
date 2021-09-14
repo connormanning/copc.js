@@ -1,5 +1,4 @@
 export * as Constants from './constants'
 export { Copc } from './copc'
 export { Hierarchy } from './hierarchy'
-export { Key } from './key'
 export { Offsets } from './offsets'
