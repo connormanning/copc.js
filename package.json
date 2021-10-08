@@ -1,7 +1,7 @@
 {
   "name": "@landrush/copc",
   "license": "UNLICENSED",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "main": "lib/index.js",
   "scripts": {
     "build": "ttsc --project tsconfig.production.json",
