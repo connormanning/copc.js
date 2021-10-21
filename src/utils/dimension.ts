@@ -28,9 +28,47 @@ const Type = {
   // Aliases.
   float: { type: 'float', size: 4 },
   double: { type: 'float', size: 8 },
-  // Minimum size of one byte, so this is a convenience for a uint8.
+  // Minimum size of one byte, so this is a convenience for a byte.
   bool: { type: 'unsigned', size: 1 },
   boolean: { type: 'unsigned', size: 1 },
 } as const
 
-export const Dimension = { Type }
+export const Dimension = { Type, ctype }
+
+function ctype({ type, size }: Dimension): string {
+  switch (type) {
+    case 'signed': {
+      switch (size) {
+        case 1:
+          return 'int8'
+        case 2:
+          return 'int16'
+        case 4:
+          return 'int32'
+        case 8:
+          return 'int64'
+      }
+    }
+    case 'unsigned': {
+      switch (size) {
+        case 1:
+          return 'uint8'
+        case 2:
+          return 'uint16'
+        case 4:
+          return 'uint32'
+        case 8:
+          return 'uint64'
+      }
+    }
+    case 'float': {
+      switch (size) {
+        case 4:
+          return 'float'
+        case 8:
+          return 'double'
+      }
+    }
+  }
+  throw new Error(`Invalid dimension type/size: ${type}/${size}`)
+}

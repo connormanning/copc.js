@@ -26,11 +26,5 @@ test('offsets', async () => {
     span: 0,
     rootHierarchyOffset: 400368,
     rootHierarchyLength: 160,
-    lazVlrOffset: 643,
-    lazVlrLength: 52,
-    wktVlrOffset: 749,
-    wktVlrLength: 681,
-    extraBytesVlrOffset: 0,
-    extraBytesVlrLength: 0,
   })
 })

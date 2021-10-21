@@ -1,7 +1,7 @@
 import { Binary, Getter, parseBigInt } from '../utils'
 
+
 import { hierarchyItemLength } from './constants'
-import { Key } from './key'
 
 export declare namespace Hierarchy {
   export type Lazy = {
@@ -15,11 +15,19 @@ export declare namespace Hierarchy {
     pointDataOffset: number
     pointDataLength: number
   }
+  export type Root = {
+    type: 'root'
+    pointCount: number
+    pointDataOffset: number
+    pointDataLength: number
+    pageOffset: number
+    pageLength: number
+  }
 
-  export type Item = Lazy | Node
+  export type Item = Lazy | Node | Root
 }
 export type Hierarchy = { [key: string]: Hierarchy.Item | undefined }
-export const Hierarchy = { parse, loadPage, maybeLoadPage }
+export const Hierarchy = { parse, loadPage, maybeLoadPage, extractPage, merge }
 
 function parse(buffer: Binary): Hierarchy {
   const dv = Binary.toDataView(buffer)
@@ -74,8 +82,73 @@ async function maybeLoadPage(
   const { [Key.toString(key)]: item } = hierarchy
 
   if (!item) throw new Error(`Hierarchy item is not loaded: ${key.toString()}`)
-  if (item.type === 'node') return
+  if (item.type === 'node' || item.type === 'root') return
   if (item.type === 'lazy') return loadPage(get, item)
 
   throw new Error(`Invalid hierarchy item type`)
+}
+
+function extractPage(hierarchy: Hierarchy, key: Key | string) {
+  const page: Hierarchy = {}
+
+  function walk(key: Key, isRoot = false) {
+    const keystring = Key.toString(key)
+    const item = hierarchy[keystring]
+    if (!item) return
+    page[keystring] = item
+
+    // If our type is "node", and we're not the requested subtree root, keep
+    // walking.  Otherwise we've hit a new subroot, so we're done walking.
+    if (item.type === 'node' || isRoot) {
+      for (let i = 0; i < 8; ++i) {
+        walk(Key.step(key, Step.fromIndex(i)))
+      }
+    }
+  }
+
+  walk(Key.create(key), true)
+
+  return page
+}
+
+function merge(
+  hierarchy: Hierarchy,
+  key: Key | string,
+  page: Hierarchy | undefined
+): Hierarchy {
+  if (!page) return hierarchy
+
+  const keystring = Key.toString(key)
+  // First, grab our subroot key in our existing hierarchy.  Under normal
+  // circumstances, we expect it to be of type "lazy", since we are merging in
+  // its page right now.
+  const { [keystring]: lazy, ...hierarchyrest } = hierarchy
+  if (!lazy) {
+    throw new Error(`Invalid hierarchy state - missing subroot: ${keystring}`)
+  }
+  if (lazy.type === 'node') {
+    throw new Error(`Invalid hierarchy state - node mismatch: ${keystring}`)
+  }
+  if (lazy.type === 'root') {
+    return hierarchy
+  }
+
+  const { [keystring]: pageroot, ...pagerest } = page
+  if (!pageroot) {
+    throw new Error(`Invalid hierarchy page - missing subroot: ${keystring}`)
+  }
+  if (pageroot.type !== 'node') {
+    throw new Error(`Invalid hierarchy page - invalid subroot: ${keystring}`)
+  }
+
+  const root: Hierarchy.Root = {
+    type: 'root',
+    pageOffset: lazy.pageOffset,
+    pageLength: lazy.pageLength,
+    pointCount: pageroot.pointCount,
+    pointDataOffset: pageroot.pointDataOffset,
+    pointDataLength: pageroot.pointDataLength,
+  }
+
+  return { ...hierarchyrest, [keystring]: root, ...pagerest }
 }
