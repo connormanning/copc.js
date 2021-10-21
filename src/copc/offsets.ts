@@ -3,7 +3,11 @@ import { Binary, parseBigInt } from 'utils'
 import { offsetsLength } from './constants'
 
 export type Offsets = {
-  span: number
+  center_x: number
+  center_y: number
+  center_z: number
+  halfsize: number
+  spacing: number
   rootHierarchyOffset: number
   rootHierarchyLength: number
 }
@@ -19,8 +23,12 @@ function parse(buffer: Binary): Offsets {
   }
 
   return {
-    span: parseBigInt(dv.getBigInt64(0, true)),
-    rootHierarchyOffset: parseBigInt(dv.getBigUint64(8, true)),
-    rootHierarchyLength: parseBigInt(dv.getBigUint64(16, true)),
+    center_x: Number(dv.getFloat64(0, true)),
+    center_y: Number(dv.getFloat64(8, true)),
+    center_z: Number(dv.getFloat64(16, true)),
+    halfsize: Number(dv.getFloat64(24, true)),
+    spacing: Number(dv.getFloat64(32, true)),
+    rootHierarchyOffset: parseBigInt(dv.getBigUint64(40, true)),
+    rootHierarchyLength: parseBigInt(dv.getBigUint64(48, true)),
   }
 }
