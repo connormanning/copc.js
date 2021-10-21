@@ -1,4 +1,4 @@
-import { Extractor as ExtractorType, Scale } from '../utils'
+import { Extractor as ExtractorType, Scale } from 'utils'
 
 import { Header } from './header'
 

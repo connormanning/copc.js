@@ -1,10 +1,9 @@
-import { Binary } from '../utils'
+import { Binary } from 'utils'
 
 import { Header } from './header'
 
-let isReady = false
 //@ts-ignore
-window.Module.onRuntimeInitialized = () => (isReady = true)
+const isReady = () => !(global.Module.LASZip == undefined)
 
 export declare namespace PointData {}
 export type PointData = {}
@@ -20,7 +19,7 @@ export async function decompress(
   { pointCount, pointDataRecordFormat, pointDataRecordLength }: ChunkMetadata
 ): Promise<Binary> {
   //@ts-ignore
-  const { Module } = window;
+  const { Module } = global;
   const outBuffer = new Uint8Array(pointCount * pointDataRecordLength)
 
   while (!isReady) await new Promise((resolve) => setTimeout(resolve, 5))
