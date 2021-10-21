@@ -13,7 +13,7 @@ test('walk', async () => {
   const vlrs = await Vlr.walk(filename, header)
   expect(vlrs).toEqual<Vlr[]>([
     {
-      userId: 'entwine',
+      userId: 'copc',
       recordId: 1,
       contentOffset: 429,
       contentLength: 160,
@@ -37,7 +37,7 @@ test('walk', async () => {
       isExtended: false,
     },
     {
-      userId: 'entwine',
+      userId: 'copc',
       recordId: 1000,
       contentOffset: 400368,
       contentLength: 160,

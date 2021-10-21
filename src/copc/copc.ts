@@ -21,7 +21,7 @@ async function create(filename: string | Getter): Promise<Copc> {
   const header = Las.Header.parse(await get(0, Las.Constants.headerLength))
   const vlrs = await Las.Vlr.walk(get, header)
 
-  const copcVlr = vlrs.find((v) => v.userId === 'entwine' && v.recordId === 1)
+  const copcVlr = vlrs.find((v) => v.userId === 'copc' && v.recordId === 1)
   if (!copcVlr) throw new Error('COPC VLR is required')
   const { contentOffset, contentLength } = copcVlr
   const offsets = Offsets.parse(
