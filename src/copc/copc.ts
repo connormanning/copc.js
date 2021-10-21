@@ -4,12 +4,14 @@ import { Getter, View, Binary } from '../utils'
 import { Hierarchy } from './hierarchy'
 import { Key } from './key'
 import { Offsets } from './offsets'
+import { Extents } from './extents'
 
 export type Copc = {
   header: Las.Header
   vlrs: Las.Vlr[]
   offsets: Offsets
   hierarchy: Hierarchy
+  extents: Object
 }
 export const Copc = { create, loadPointData, loadPointDataView, loadHierarchyPage }
 
@@ -28,6 +30,12 @@ async function create(filename: string | Getter): Promise<Copc> {
     await get(contentOffset, contentOffset + contentLength)
   )
 
+  const extentsVlr = vlrs.find((v) => v.userId === 'copc' && v.recordId === 10000)
+  if (!extentsVlr) throw new Error('Extents VLR is required')
+  const extents = Extents.parse( header,
+    await get(extentsVlr.contentOffset, extentsVlr.contentOffset + extentsVlr.contentLength)
+  )
+
   const hierarchy: Hierarchy = {
     '0-0-0-0': {
       type: 'lazy',
@@ -36,7 +44,7 @@ async function create(filename: string | Getter): Promise<Copc> {
     },
   }
 
-  return { header, vlrs, offsets, hierarchy }
+  return { header, vlrs, offsets, hierarchy, extents }
 }
 
 async function loadHierarchyPage(
