@@ -1,4 +1,4 @@
-import * as Las from '../las'
+import * as Las from 'las'
 import { Getter, View, Key, Binary } from 'utils'
 import { Hierarchy } from './hierarchy'
 import { Offsets } from './offsets'
@@ -45,7 +45,6 @@ async function loadHierarchyPage(
   const get = Getter.create(filename)
   const page = await Hierarchy.maybeLoadPage(get, copc.hierarchy, key)
   copc.hierarchy = Hierarchy.merge(copc.hierarchy, key, page)
-  return page;
 }
 
 async function loadPointData(

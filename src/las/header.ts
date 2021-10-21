@@ -1,4 +1,4 @@
-import {Binary, parseBigInt, Point} from 'utils'
+import {Binary, Point, parseBigInt,} from 'utils'
 import { headerLength } from './constants'
 import { formatGuid, parsePoint } from './utils'
 
