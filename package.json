@@ -7,9 +7,12 @@
     "build": "ttsc --project tsconfig.production.json",
     "prepare": "yarn build",
     "test": "jest",
-    "web-build": "rm -rf ./web && esbuild src/index.ts --define:global=window --bundle --minify --outfile=web/copc.js --format=iife --global-name=COPC --target=es2020 && cp -R ./src/laz-perf ./web/laz-perf"
+    "web-build": "rm -rf ./web && esbuild src/index.ts --define:global=window --bundle --minify --outfile=web/copc.js --format=iife --global-name=COPC --target=es2020 && cp -R ./src/laz-perf ./web/laz-perf",
+    "web-build-debug": "esbuild src/index.ts --define:global=window --bundle --sourcemap --outfile=web/copc.js --format=iife --global-name=COPC --target=es2020"
   },
-  "dependencies": {},
+  "dependencies": {
+    "yarn": "^1.22.17"
+  },
   "devDependencies": {
     "@types/emscripten": "^1.39.5",
     "@types/jest": "^27.0.1",
