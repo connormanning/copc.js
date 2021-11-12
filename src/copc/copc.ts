@@ -27,7 +27,7 @@ async function create(filename: string | Getter): Promise<Copc> {
     count: 1,
     isExtended: false,
   })
-  if (!copcVlr) throw new Error('COPC VLR is required')
+  if (copcVlr.length == 0) throw new Error('COPC VLR is required')
   const { contentOffset, contentLength } = copcVlr[0]
   const offsets = Offsets.parse(
     await get(contentOffset, contentOffset + contentLength)
@@ -39,7 +39,7 @@ async function create(filename: string | Getter): Promise<Copc> {
     count: 1,
     isExtended: false,
   })
-  if (!extentsVlr) throw new Error('Extents VLR is required')
+  if (extentsVlr.length == 0) throw new Error('Extents VLR is required')
   const extents = Extents.parse( header,
     await get(extentsVlr[0].contentOffset, extentsVlr[0].contentOffset + extentsVlr[0].contentLength)
   )
