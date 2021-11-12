@@ -19,19 +19,29 @@ export const Copc = { create, loadPointData, loadPointDataView, loadHierarchyPag
 async function create(filename: string | Getter): Promise<Copc> {
   const get = Getter.create(filename)
   const header = Las.Header.parse(await get(0, Las.Constants.headerLength))
-  const vlrs = await Las.Vlr.walk(get, header)
+  // const vlrs = await Las.Vlr.walk(get, header)
 
-  const copcVlr = vlrs.find((v) => v.userId === 'copc' && v.recordId === 1)
-  if (!copcVlr) throw new Error('COPC VLR is required')
-  const { contentOffset, contentLength } = copcVlr
+  const copcVlr = await Las.Vlr.doWalk({
+    get,
+    startOffset: 375,
+    count: 1,
+    isExtended: false,
+  })
+  if (copcVlr.length == 0) throw new Error('COPC VLR is required')
+  const { contentOffset, contentLength } = copcVlr[0]
   const offsets = Offsets.parse(
     await get(contentOffset, contentOffset + contentLength)
   )
 
-  const extentsVlr = vlrs.find((v) => v.userId === 'copc' && v.recordId === 10000)
-  if (!extentsVlr) throw new Error('Extents VLR is required')
+  const extentsVlr = await Las.Vlr.doWalk({
+    get,
+    startOffset: 375 + 160 + 54, // right after the copcinfo vlr
+    count: 1,
+    isExtended: false,
+  })
+  if (extentsVlr.length == 0) throw new Error('Extents VLR is required')
   const extents = Extents.parse( header,
-    await get(extentsVlr.contentOffset, extentsVlr.contentOffset + extentsVlr.contentLength)
+    await get(extentsVlr[0].contentOffset, extentsVlr[0].contentOffset + extentsVlr[0].contentLength)
   )
 
   const hierarchy: Hierarchy = {
@@ -42,7 +52,7 @@ async function create(filename: string | Getter): Promise<Copc> {
     },
   }
 
-  return { header, vlrs, offsets, hierarchy, extents }
+  return { header, vlrs: [], offsets, hierarchy, extents }
 }
 
 async function loadHierarchyPage(
