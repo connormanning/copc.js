@@ -1,5 +1,4 @@
-import { Binary, Getter, Key, Step, parseBigInt } from 'utils'
-
+import {Binary, Getter, Key, Step, parseBigInt} from 'utils'
 import { hierarchyItemLength } from './constants'
 
 export declare namespace Hierarchy {

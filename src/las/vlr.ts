@@ -13,7 +13,7 @@ export type Vlr = {
   isExtended: boolean
 }
 type VlrWithoutOffset = Omit<Vlr, 'contentOffset'>
-export const Vlr = { walk, parse }
+export const Vlr = { walk, parse, doWalk }
 
 async function walk(filename: string | Getter, header: Header) {
   const get = Getter.create(filename)

@@ -11,11 +11,13 @@
     "declaration": true,
     "declarationMap": true,
 
-    "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "noImplicitAny": true,
     "esModuleInterop": true,
-    "plugins": [{ "transform": "@zerollup/ts-transform-paths" }]
+    "plugins": [{ "transform": "@zerollup/ts-transform-paths" }],
+
+    "allowJs": true,
+    "checkJs": false,
   }
 }
