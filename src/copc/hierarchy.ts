@@ -3,6 +3,22 @@ import { Binary, Getter, Key, Step, parseBigInt } from 'utils'
 import { hierarchyItemLength } from './constants'
 
 export declare namespace Hierarchy {
+  export type Node = {
+    pointCount: number
+    pointDataOffset: number
+    pointDataLength: number
+  }
+  export namespace Node {
+    export type Map = Record<string, Node | undefined>
+  }
+
+  export type Page = { pageOffset: number; pageLength: number }
+  export namespace Page {
+    export type Map = Record<string, Page | undefined>
+    export type Data = { nodes: Node.Map; pages: Page.Map }
+  }
+
+  /*
   export type Lazy = {
     type: 'lazy'
     pageOffset: number
@@ -24,16 +40,23 @@ export declare namespace Hierarchy {
   }
 
   export type Item = Lazy | Node | Root
+  */
 }
-export type Hierarchy = { [key: string]: Hierarchy.Item | undefined }
-export const Hierarchy = { parse, loadPage, maybeLoadPage, extractPage, merge }
+export type Hierarchy = Hierarchy.Node.Map
+export const Hierarchy = {
+  parse,
+  load,
+  /* loadPage, maybeLoadPage, extractPage, merge */
+}
 
-function parse(buffer: Binary): Hierarchy {
+function parse(buffer: Binary): Hierarchy.Page.Data {
   const dv = Binary.toDataView(buffer)
   if (dv.byteLength % hierarchyItemLength !== 0) {
     throw new Error(`Invalid hierarchy page length: ${dv.byteLength}`)
   }
-  const hierarchy: Hierarchy = {}
+
+  const nodes: Hierarchy.Node.Map = {}
+  const pages: Hierarchy.Page.Map = {}
 
   for (let i = 0; i < dv.byteLength; i += hierarchyItemLength) {
     const d = dv.getInt32(i + 0, true)
@@ -48,22 +71,29 @@ function parse(buffer: Binary): Hierarchy {
 
     if (pointCount < -1) {
       throw new Error(`Invalid hierarchy point count at key: ${key}`)
+    } else if (pointCount === -1) {
+      pages[key] = {
+        pageOffset: offset,
+        pageLength: length,
+      }
+    } else {
+      nodes[key] = {
+        pointCount,
+        pointDataOffset: offset,
+        pointDataLength: length,
+      }
     }
-
-    hierarchy[key] =
-      pointCount === -1
-        ? { type: 'lazy', pageOffset: offset, pageLength: length }
-        : {
-            type: 'node',
-            pointCount,
-            pointDataOffset: offset,
-            pointDataLength: length,
-          }
   }
 
-  return hierarchy
+  return { nodes, pages }
 }
 
+async function load(filename: string | Getter, page: Hierarchy.Page) {
+  const get = Getter.create(filename)
+  return parse(await get(page.pageOffset, page.pageOffset + page.pageLength))
+}
+
+/*
 async function loadPage(
   filename: string | Getter,
   item: Hierarchy.Lazy
@@ -151,3 +181,4 @@ function merge(
 
   return { ...hierarchyrest, [keystring]: root, ...pagerest }
 }
+*/

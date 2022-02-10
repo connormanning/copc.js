@@ -2,14 +2,18 @@ import { Binary } from 'utils'
 import * as Utils from 'utils'
 
 import { Dimensions } from './dimensions'
+import { ExtraBytes } from './extra-bytes'
 import { Extractor } from './extractor'
-import { Header } from './header'
 
 export const View = { create }
 
-function create(header: Header, buffer: Binary): Utils.View {
-  const extractors = Extractor.create(header)
-  const dimensions = Dimensions.create(extractors)
+function create(
+  buffer: Binary,
+  header: Extractor.PartialHeader,
+  eb: ExtraBytes[] = []
+): Utils.View {
+  const extractors = Extractor.create(header, eb)
+  const dimensions = Dimensions.create(extractors, eb)
   const dv = Binary.toDataView(buffer)
 
   const pointLength = header.pointDataRecordLength

@@ -23,6 +23,5 @@ export declare interface LazPerf extends EmscriptenModule {
   LASZip: typeof LASZip
   ChunkDecoder: typeof ChunkDecoder
 }
-
-declare function createLazPerf(): Promise<LazPerf>
-export default createLazPerf
+declare const lazperf: LazPerf
+export default lazperf

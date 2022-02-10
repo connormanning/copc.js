@@ -1,11 +1,7 @@
-import Module from 'laz-perf'
-
+import { createLazPerf } from 'laz-perf'
 import { Binary } from 'utils'
 
 import { Header } from './header'
-
-let isReady = false
-Module.onRuntimeInitialized = () => (isReady = true)
 
 export declare namespace PointData {}
 export type PointData = {}
@@ -16,20 +12,21 @@ type ChunkMetadata = Pick<
   'pointCount' | 'pointDataRecordFormat' | 'pointDataRecordLength'
 >
 
+const lazPerfPromise = createLazPerf()
+
 export async function decompress(
   compressed: Binary,
   { pointCount, pointDataRecordFormat, pointDataRecordLength }: ChunkMetadata
 ): Promise<Binary> {
+  const LazPerf = await lazPerfPromise
   const outBuffer = new Uint8Array(pointCount * pointDataRecordLength)
 
-  while (!isReady) await new Promise((resolve) => setTimeout(resolve, 5))
-
-  const blobPointer = Module._malloc(compressed.byteLength)
-  const dataPointer = Module._malloc(pointDataRecordLength)
-  const decoder = new Module.ChunkDecoder()
+  const blobPointer = LazPerf._malloc(compressed.byteLength)
+  const dataPointer = LazPerf._malloc(pointDataRecordLength)
+  const decoder = new LazPerf.ChunkDecoder()
 
   try {
-    Module.HEAPU8.set(
+    LazPerf.HEAPU8.set(
       new Uint8Array(
         compressed.buffer,
         compressed.byteOffset,
@@ -45,7 +42,7 @@ export async function decompress(
 
       outBuffer.set(
         new Uint8Array(
-          Module.HEAPU8.buffer,
+          LazPerf.HEAPU8.buffer,
           dataPointer,
           pointDataRecordLength
         ),
@@ -53,8 +50,8 @@ export async function decompress(
       )
     }
   } finally {
-    Module._free(blobPointer)
-    Module._free(dataPointer)
+    LazPerf._free(blobPointer)
+    LazPerf._free(dataPointer)
     decoder.delete()
   }
 

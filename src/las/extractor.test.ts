@@ -1,5 +1,5 @@
 import { Binary, Point } from 'utils'
-import { View } from './view'
+import { Extractor } from './extractor'
 
 const X = 100
 const Y = 200
@@ -115,25 +115,115 @@ p7.writeUInt16LE(Blue, 34)
 const p8 = Buffer.concat([p7, Buffer.alloc(2)])
 p8.writeUInt16LE(Infrared, 36)
 
-test('view', () => {
-  const pointDataRecordFormat = 6
-  const pointDataRecordLength = 30
-  const header = {
+type Validator = Record<string, number>
+function validate(
+  dv: DataView,
+  extractor: Extractor.Map,
+  validator: Validator,
+  index = 0
+) {
+  Object.entries(validator).forEach(([name, value]) => {
+    const get = extractor[name]
+    if (!get) throw new Error(`Missing extractor for: ${name}`)
+    expect(get(dv, index)).toEqual(value)
+  })
+}
+
+test('pdrf 0', () => {
+  const pointDataRecordFormat = 0
+  const pointDataRecordLength = 20
+  const extractor = Extractor.create({
     pointDataRecordFormat,
     pointDataRecordLength,
     scale,
     offset,
-  }
+  })
+
+  // We're going to offset our actual point into position 2 rather than 0 to
+  // make sure we are computing our offsets properly.
+  const buffer = Buffer.concat([Buffer.alloc(pointDataRecordLength * 2), p0])
+  validate(Binary.toDataView(buffer), extractor, P0, 2)
+})
+
+test('pdrf 1', () => {
+  const pointDataRecordFormat = 1
+  const pointDataRecordLength = 28
+  const extractor = Extractor.create({
+    pointDataRecordFormat,
+    pointDataRecordLength,
+    scale,
+    offset,
+  })
+  const buffer = Buffer.concat([Buffer.alloc(pointDataRecordLength * 2), p1])
+  validate(Binary.toDataView(buffer), extractor, P1, 2)
+})
+
+test('pdrf 2', () => {
+  const pointDataRecordFormat = 2
+  const pointDataRecordLength = 26
+  const extractor = Extractor.create({
+    pointDataRecordFormat,
+    pointDataRecordLength,
+    scale,
+    offset,
+  })
+
+  const buffer = Buffer.concat([Buffer.alloc(pointDataRecordLength * 2), p2])
+  validate(Binary.toDataView(buffer), extractor, P2, 2)
+})
+
+test('pdrf 3', () => {
+  const pointDataRecordFormat = 3
+  const pointDataRecordLength = 34
+  const extractor = Extractor.create({
+    pointDataRecordFormat,
+    pointDataRecordLength,
+    scale,
+    offset,
+  })
+
+  const buffer = Buffer.concat([Buffer.alloc(pointDataRecordLength * 2), p3])
+  validate(Binary.toDataView(buffer), extractor, P3, 2)
+})
+
+test('pdrf 6', () => {
+  const pointDataRecordFormat = 6
+  const pointDataRecordLength = 30
+  const extractor = Extractor.create({
+    pointDataRecordFormat,
+    pointDataRecordLength,
+    scale,
+    offset,
+  })
 
   const buffer = Buffer.concat([Buffer.alloc(pointDataRecordLength * 2), p6])
-  const view = View.create(buffer, header)
+  validate(Binary.toDataView(buffer), extractor, P6, 2)
+})
 
-  expect(view.getter('X')(2)).toEqual(X)
-  expect(view.getter('Y')(2)).toEqual(Y)
-  expect(view.getter('Z')(2)).toEqual(Z)
-  expect(view.getter('GpsTime')(2)).toEqual(GpsTime)
+test('pdrf 7', () => {
+  const pointDataRecordFormat = 7
+  const pointDataRecordLength = 36
+  const extractor = Extractor.create({
+    pointDataRecordFormat,
+    pointDataRecordLength,
+    scale,
+    offset,
+  })
 
-  expect(() => view.getter('Nothing')).toThrow(/Nothing/)
-  expect(() => View.create(buffer.slice(0, -1), header)).toThrow(/length/i)
-  expect(() => view.getter('X')(3)).toThrow(/range/i)
+  const buffer = Buffer.concat([Buffer.alloc(pointDataRecordLength * 2), p7])
+  validate(Binary.toDataView(buffer), extractor, P7, 2)
+})
+
+test('pdrf 8', () => {
+  const pointDataRecordFormat = 8
+  const pointDataRecordLength = 38
+  const extractor = Extractor.create({
+    pointDataRecordFormat,
+    pointDataRecordLength,
+    scale,
+    offset,
+  })
+
+  const buffer = Buffer.concat([Buffer.alloc(pointDataRecordLength * 2), p8])
+  validate(Binary.toDataView(buffer), extractor, P8, 2)
 })

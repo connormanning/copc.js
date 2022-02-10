@@ -1,7 +1,7 @@
 {
   "name": "@landrush/copc",
   "license": "UNLICENSED",
-  "version": "0.0.5",
+  "version": "0.0.15",
   "main": "lib/index.js",
   "scripts": {
     "build": "ttsc --project tsconfig.production.json",
@@ -9,15 +9,15 @@
     "test": "jest",
     "webpack": "webpack --config webpack.config.js --mode production"
   },
-  "dependencies": {},
+  "dependencies": {
+    "cross-fetch": "^3.1.5"
+  },
   "devDependencies": {
     "@types/emscripten": "^1.39.5",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.6.1",
-    "@types/node-fetch": "^2.5.12",
     "@zerollup/ts-transform-paths": "^1.7.18",
     "copy-webpack-plugin": "^9.0.1",
-    "forager": "^0.0.8",
     "husky": "^7.0.1",
     "jest": "^27.0.6",
     "prettier": "^2.3.2",

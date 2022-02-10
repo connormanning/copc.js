@@ -1,2 +1,2 @@
-import Module from './laz-perf'
-export default Module
+import createLazPerf from './laz-perf'
+export { createLazPerf }

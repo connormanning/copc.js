@@ -7,7 +7,13 @@ const filename = ellipsoidFilename
 
 test('data', async () => {
   const copc = await Copc.create(filename)
-  const view = await Copc.loadPointData(filename, copc, '0-0-0-0')
+  const { nodes } = await Copc.loadHierarchyPage(
+    filename,
+    copc.info.rootHierarchyPage
+  )
+  const { ['0-0-0-0']: root } = nodes
+  if (!root) throw new Error('Failed to load hierarchy root node')
+  const view = await Copc.loadPointDataView(filename, copc, root)
 
   expect(view.dimensions).toEqual<Dimension.Map>({
     X: { type: 'float', size: 8 },
@@ -19,6 +25,7 @@ test('data', async () => {
     ScanDirectionFlag: { type: 'unsigned', size: 1 },
     EdgeOfFlightLine: { type: 'unsigned', size: 1 },
     Classification: { type: 'unsigned', size: 1 },
+    ScannerChannel: { type: 'unsigned', size: 1 },
     Synthetic: { type: 'unsigned', size: 1 },
     KeyPoint: { type: 'unsigned', size: 1 },
     Withheld: { type: 'unsigned', size: 1 },

@@ -1,86 +1,77 @@
 import * as Las from 'las'
-import { Getter, Key, View } from 'utils'
+import { Binary, Getter } from 'utils'
 
 import { Hierarchy } from './hierarchy'
-import { Offsets } from './offsets'
+import { Info } from './info'
 
 export type Copc = {
   header: Las.Header
   vlrs: Las.Vlr[]
-  offsets: Offsets
-  hierarchy: Hierarchy
+  info: Info
+  eb: Las.ExtraBytes[]
+  wkt?: string
 }
-export const Copc = { create, loadPointData, loadHierarchyPage }
+export const Copc = {
+  create,
+  loadHierarchyPage,
+  loadPointDataBuffer,
+  loadPointDataView,
+}
 
 /**
  * Parse the COPC header and walk VLR and EVLR metadata.
  */
 async function create(filename: string | Getter): Promise<Copc> {
   const get = Getter.create(filename)
-  const header = Las.Header.parse(await get(0, Las.Constants.headerLength))
+  const header = Las.Header.parse(await get(0, Las.Constants.minHeaderLength))
   const vlrs = await Las.Vlr.walk(get, header)
 
-  const copcVlr = vlrs.find((v) => v.userId === 'entwine' && v.recordId === 1)
-  if (!copcVlr) throw new Error('COPC VLR is required')
-  const { contentOffset, contentLength } = copcVlr
-  const offsets = Offsets.parse(
-    await get(contentOffset, contentOffset + contentLength)
-  )
+  const infoVlr = Las.Vlr.find(vlrs, 'copc', 1)
+  if (!infoVlr) throw new Error('COPC info VLR is required')
+  const info = Info.parse(await Las.Vlr.fetch(get, infoVlr))
 
-  const hierarchy: Hierarchy = {
-    '0-0-0-0': {
-      type: 'lazy',
-      pageOffset: offsets.rootHierarchyOffset,
-      pageLength: offsets.rootHierarchyLength,
-    },
-  }
+  let wkt: string | undefined
+  const wktVlr = Las.Vlr.find(vlrs, 'LASF_Projection', 2112)
+  if (wktVlr) wkt = Binary.toCString(await Las.Vlr.fetch(get, wktVlr))
 
-  return { header, vlrs, offsets, hierarchy }
+  let eb: Las.ExtraBytes[] = []
+  const ebVlr = Las.Vlr.find(vlrs, 'LASF_Spec', 4)
+  if (ebVlr) eb = Las.ExtraBytes.parse(await Las.Vlr.fetch(get, ebVlr))
+
+  return { header, vlrs, info, wkt, eb }
 }
 
 async function loadHierarchyPage(
   filename: string | Getter,
-  copc: Copc,
-  key: Key | string = '0-0-0-0'
+  page: Hierarchy.Page
 ) {
   const get = Getter.create(filename)
-  const page = await Hierarchy.maybeLoadPage(get, copc.hierarchy, key)
-  copc.hierarchy = Hierarchy.merge(copc.hierarchy, key, page)
+  return Hierarchy.load(get, page)
 }
 
-async function loadPointData(
+async function loadPointDataBuffer(
   filename: string | Getter,
-  copc: Copc,
-  key: Key | string
-): Promise<View> {
+  { pointDataRecordFormat, pointDataRecordLength }: Las.Header,
+  { pointCount, pointDataOffset, pointDataLength }: Hierarchy.Node
+) {
   const get = Getter.create(filename)
-
-  // Ensure that the hierarchy entry for this node is loaded.
-  const page = await Hierarchy.maybeLoadPage(get, copc.hierarchy, key)
-  copc.hierarchy = Hierarchy.merge(copc.hierarchy, key, page)
-
-  // Grab the hierarchy data for this entry.
-  const keystring = Key.toString(key)
-  const { [keystring]: item } = copc.hierarchy
-  if (!item || item.type === 'lazy') {
-    throw new Error(
-      `Cannot get point data - hierarchy not loaded: ${keystring}`
-    )
-  }
-
-  // Now fetch, decompress, and create a view over the point data.
-  const { pointDataRecordFormat, pointDataRecordLength } = copc.header
-  const { pointCount, pointDataOffset, pointDataLength } = item
-
   const compressed = await get(
     pointDataOffset,
     pointDataOffset + pointDataLength
   )
-  const buffer = await Las.PointData.decompress(compressed, {
+
+  return Las.PointData.decompress(compressed, {
+    pointCount,
     pointDataRecordFormat,
     pointDataRecordLength,
-    pointCount,
   })
+}
 
-  return Las.View.create(copc.header, buffer)
+async function loadPointDataView(
+  filename: string | Getter,
+  copc: Copc,
+  node: Hierarchy.Node
+) {
+  const buffer = await loadPointDataBuffer(filename, copc.header, node)
+  return Las.View.create(buffer, copc.header, copc.eb)
 }

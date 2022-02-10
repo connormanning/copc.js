@@ -1,6 +1,6 @@
 import { Binary, Point, parseBigInt } from 'utils'
 
-import { headerLength } from './constants'
+import { minHeaderLength } from './constants'
 import { formatGuid, parsePoint } from './utils'
 
 export declare namespace Header {}
@@ -33,13 +33,11 @@ export type Header = {
 export const Header = { parse }
 
 function parse(buffer: Binary): Header {
-  const dv = Binary.toDataView(buffer)
-  if (dv.byteLength !== headerLength) {
-    throw new Error(
-      `Invalid header length (should be ${headerLength}): ${dv.byteLength}`
-    )
+  if (buffer.byteLength < minHeaderLength) {
+    throw new Error(`Invalid header: must be at least ${minHeaderLength} bytes`)
   }
 
+  const dv = Binary.toDataView(buffer)
   const fileSignature = Binary.toCString(buffer.slice(0, 4))
   if (fileSignature !== 'LASF') {
     throw new Error(`Invalid file signature: ${fileSignature}`)
