@@ -1,11 +1,10 @@
 {
   "name": "@landrush/copc",
   "license": "UNLICENSED",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "main": "lib/index.js",
   "scripts": {
-    "build": "rollup -c",
-    "_build": "ttsc --project tsconfig.production.json",
+    "build": "rollup -c && ttsc --project tsconfig.production.json --emitDeclarationOnly",
     "prepare": "yarn build",
     "test": "jest",
     "webpack": "webpack --config webpack.config.js --mode production"
