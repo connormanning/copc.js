@@ -1,7 +1,7 @@
 {
   "name": "@landrush/copc",
   "license": "UNLICENSED",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "main": "lib/index.js",
   "scripts": {
     "build": "rollup -c && ttsc --project tsconfig.production.json --emitDeclarationOnly",
