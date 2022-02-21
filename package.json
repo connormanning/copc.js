@@ -1,7 +1,7 @@
 {
   "name": "@landrush/copc",
   "license": "UNLICENSED",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "main": "lib/index.js",
   "scripts": {
     "build": "rollup -c && ttsc --project tsconfig.production.json --emitDeclarationOnly && cp src/laz-perf/laz-perf.d.ts lib/laz-perf/",
