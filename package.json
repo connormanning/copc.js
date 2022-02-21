@@ -1,10 +1,10 @@
 {
   "name": "@landrush/copc",
   "license": "UNLICENSED",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "main": "lib/index.js",
   "scripts": {
-    "build": "rollup -c && ttsc --project tsconfig.production.json --emitDeclarationOnly",
+    "build": "rollup -c && ttsc --project tsconfig.production.json --emitDeclarationOnly && cp src/laz-perf/laz-perf.d.ts lib/laz-perf/",
     "prepare": "yarn build",
     "test": "jest",
     "webpack": "webpack --config webpack.config.js --mode production"
