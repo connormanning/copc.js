@@ -1,3 +1,4 @@
+import type { LazPerf } from 'laz-perf'
 import * as Las from 'las'
 import { Binary, Getter } from 'utils'
 
@@ -49,29 +50,36 @@ async function loadHierarchyPage(
   return Hierarchy.load(get, page)
 }
 
+async function loadCompressedPointDataBuffer(
+  filename: string | Getter,
+  { pointDataOffset, pointDataLength }: Hierarchy.Node
+) {
+  const get = Getter.create(filename)
+  return get(pointDataOffset, pointDataOffset + pointDataLength)
+}
+
 async function loadPointDataBuffer(
   filename: string | Getter,
   { pointDataRecordFormat, pointDataRecordLength }: Las.Header,
-  { pointCount, pointDataOffset, pointDataLength }: Hierarchy.Node
+  node: Hierarchy.Node,
+  lazPerf?: LazPerf
 ) {
-  const get = Getter.create(filename)
-  const compressed = await get(
-    pointDataOffset,
-    pointDataOffset + pointDataLength
-  )
+  const compressed = await loadCompressedPointDataBuffer(filename, node)
 
-  return Las.PointData.decompress(compressed, {
-    pointCount,
-    pointDataRecordFormat,
-    pointDataRecordLength,
-  })
+  const { pointCount } = node
+  return Las.PointData.decompressChunk(
+    compressed,
+    { pointCount, pointDataRecordFormat, pointDataRecordLength },
+    lazPerf
+  )
 }
 
 async function loadPointDataView(
   filename: string | Getter,
   copc: Copc,
-  node: Hierarchy.Node
+  node: Hierarchy.Node,
+  lazPerf?: LazPerf
 ) {
-  const buffer = await loadPointDataBuffer(filename, copc.header, node)
+  const buffer = await loadPointDataBuffer(filename, copc.header, node, lazPerf)
   return Las.View.create(buffer, copc.header, copc.eb)
 }

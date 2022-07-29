@@ -1,4 +1,4 @@
-import { Binary, Dimension, parseBigInt } from 'utils'
+import { Binary, Dimension, getBigUint64, parseBigInt } from '../utils'
 
 export namespace ExtraBytes {
   export type Options = {
@@ -94,7 +94,7 @@ function parseOne(buffer: Binary): ExtraBytes {
       case 'signed':
         return parseBigInt(dv.getBigInt64(offset, true))
       case 'unsigned':
-        return parseBigInt(dv.getBigUint64(offset, true))
+        return parseBigInt(getBigUint64(dv, offset, true))
       case 'float':
         return dv.getFloat64(offset, true)
     }
@@ -124,8 +124,12 @@ function parseType(typecode: number) {
     case 6:
       return Dimension.Type.int32
     case 7:
-      return Dimension.Type.float32
+      return Dimension.Type.uint64
     case 8:
+      return Dimension.Type.int64
+    case 9:
+      return Dimension.Type.float32
+    case 10:
       return Dimension.Type.float64
   }
 }

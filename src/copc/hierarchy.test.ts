@@ -28,7 +28,7 @@ test('parse one', () => {
   const buffer = pack({ key, pointCount, pointDataOffset, pointDataLength })
 
   const h = Hierarchy.parse(buffer)
-  expect(h).toEqual<Hierarchy.Page.Data>({
+  expect(h).toEqual<Hierarchy.Subtree>({
     pages: {},
     nodes: {
       [Key.toString(key)]: { pointCount, pointDataOffset, pointDataLength },

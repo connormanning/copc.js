@@ -1,4 +1,4 @@
-import { Binary, Point, parseBigInt } from 'utils'
+import { Binary, Point, getBigUint64, parseBigInt } from '../utils'
 
 import { minHeaderLength } from './constants'
 import { formatGuid, parsePoint } from './utils'
@@ -45,13 +45,13 @@ function parse(buffer: Binary): Header {
 
   const majorVersion = dv.getUint8(24)
   const minorVersion = dv.getUint8(25)
-  if (majorVersion !== 1 || minorVersion !== 4) {
+  if (majorVersion !== 1 || (minorVersion !== 2 && minorVersion !== 4)) {
     throw new Error(
-      `Invalid version (only 1.4 supported): ${majorVersion}.${minorVersion}`
+      `Invalid version (only 1.2 and 1.4 supported): ${majorVersion}.${minorVersion}`
     )
   }
 
-  return {
+  const header: Header = {
     fileSignature,
     fileSourceId: dv.getUint16(4, true),
     globalEncoding: dv.getUint16(6, true),
@@ -67,8 +67,10 @@ function parse(buffer: Binary): Header {
     vlrCount: dv.getUint32(100, true),
     pointDataRecordFormat: dv.getUint8(104) & 0b1111,
     pointDataRecordLength: dv.getUint16(105, true),
-    pointCount: parseBigInt(dv.getBigUint64(247, true)),
-    pointCountByReturn: parseNumberOfPointsByReturn(buffer.slice(255, 375)),
+    pointCount: dv.getUint32(107, true),
+    pointCountByReturn: parseLegacyNumberOfPointsByReturn(
+      buffer.slice(111, 131)
+    ),
     scale: parsePoint(buffer.slice(131, 155)),
     offset: parsePoint(buffer.slice(155, 179)),
     min: [
@@ -81,8 +83,19 @@ function parse(buffer: Binary): Header {
       dv.getFloat64(195, true),
       dv.getFloat64(211, true),
     ],
-    waveformDataOffset: parseBigInt(dv.getBigUint64(227, true)),
-    evlrOffset: parseBigInt(dv.getBigUint64(235, true)),
+    waveformDataOffset: 0,
+    evlrOffset: 0,
+    evlrCount: 0,
+  }
+
+  if (minorVersion == 2) return header
+
+  return {
+    ...header,
+    pointCount: parseBigInt(getBigUint64(dv, 247, true)),
+    pointCountByReturn: parseNumberOfPointsByReturn(buffer.slice(255, 375)),
+    waveformDataOffset: parseBigInt(getBigUint64(dv, 227, true)),
+    evlrOffset: parseBigInt(getBigUint64(dv, 235, true)),
     evlrCount: dv.getUint32(243, true),
   }
 }
@@ -91,7 +104,16 @@ function parseNumberOfPointsByReturn(buffer: Binary): number[] {
   const dv = Binary.toDataView(buffer)
   const bigs: BigInt[] = []
   for (let offset = 0; offset < 15 * 8; offset += 8) {
-    bigs.push(dv.getBigUint64(offset, true))
+    bigs.push(getBigUint64(dv, offset, true))
   }
   return bigs.map((v) => parseBigInt(v))
+}
+
+function parseLegacyNumberOfPointsByReturn(buffer: Binary): number[] {
+  const dv = Binary.toDataView(buffer)
+  const v: number[] = []
+  for (let offset = 0; offset < 5 * 4; offset += 4) {
+    v.push(dv.getUint32(offset, true))
+  }
+  return v
 }

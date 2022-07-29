@@ -1,7 +1,7 @@
-import { Binary, Getter, parseBigInt } from 'utils'
+import { Binary, Getter, getBigUint64, parseBigInt } from '../utils'
 
 import { Header } from './header'
-import { evlrHeaderLength, minHeaderLength, vlrHeaderLength } from './constants'
+import { evlrHeaderLength, vlrHeaderLength } from './constants'
 
 export type Vlr = {
   userId: string
@@ -87,7 +87,7 @@ function parseExtended(buffer: Binary): Vlr.WithoutOffset {
   return {
     userId: Binary.toCString(buffer.slice(2, 18)),
     recordId: dv.getUint16(18, true),
-    contentLength: parseBigInt(dv.getBigUint64(20, true)),
+    contentLength: parseBigInt(getBigUint64(dv, 20, true)),
     description: Binary.toCString(buffer.slice(28, 60)),
     isExtended: true,
   }
@@ -106,7 +106,7 @@ async function doWalk({ get, startOffset, count, isExtended }: DoWalk) {
   const length = isExtended ? evlrHeaderLength : vlrHeaderLength
 
   for (let i = 0; i < count; ++i) {
-    const buffer = await get(pos, pos + length)
+    const buffer = length ? await get(pos, pos + length) : new Uint8Array()
     const { userId, recordId, contentLength, description } = parse(
       buffer,
       isExtended

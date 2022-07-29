@@ -107,7 +107,7 @@ test('header', () => {
   expect(() => Header.parse(invalidFileSignature)).toThrow(/file signature/i)
 
   const invalidMinorVersion = Buffer.from(b)
-  invalidMinorVersion.writeUInt8(2, 25)
+  invalidMinorVersion.writeUInt8(3, 25)
   expect(() => Header.parse(invalidMinorVersion)).toThrow(/version/i)
 
   const tooShort = b.slice(0, -1)

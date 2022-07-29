@@ -1,4 +1,5 @@
 import fetch from 'cross-fetch'
+// import 'cross-fetch/polyfill'
 
 export type Getter = (begin: number, end: number) => Promise<Uint8Array>
 export const Getter = { create }
@@ -15,6 +16,7 @@ function create(arg: string | Getter): Getter {
 
 function getHttpGetter(filename: string): Getter {
   return async function getter(begin, end) {
+    if (begin < 0 || end < 0 || begin > end) throw new Error('Invalid range')
     const response = await fetch(filename, {
       headers: { Range: `bytes=${begin}-${end - 1}` },
     })

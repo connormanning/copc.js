@@ -1,4 +1,4 @@
-import { Bounds, Binary, parseBigInt, Point } from 'utils'
+import { Bounds, Binary, Point, getBigUint64, parseBigInt } from 'utils'
 
 import { infoLength } from './constants'
 import type { Hierarchy } from './hierarchy'
@@ -38,8 +38,8 @@ function parse(buffer: Binary): Info {
     ],
     spacing: dv.getFloat64(32, true),
     rootHierarchyPage: {
-      pageOffset: parseBigInt(dv.getBigUint64(40, true)),
-      pageLength: parseBigInt(dv.getBigUint64(48, true)),
+      pageOffset: parseBigInt(getBigUint64(dv, 40, true)),
+      pageLength: parseBigInt(getBigUint64(dv, 48, true)),
     },
     gpsTimeRange: [dv.getFloat64(56, true), dv.getFloat64(64, true)],
   }

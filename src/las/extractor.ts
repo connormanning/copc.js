@@ -1,4 +1,9 @@
-import { Extractor as ExtractorType, parseBigInt, Scale } from 'utils'
+import {
+  Extractor as ExtractorType,
+  Scale,
+  getBigUint64,
+  parseBigInt,
+} from '../utils'
 
 import { ExtraBytes } from './extra-bytes'
 import { Header } from './header'
@@ -69,7 +74,7 @@ function createAbsoluteExtraBytesExtractor(
             dv.getUint32(getPointOffset(index) + offset, true)
         case 8:
           return (dv, index) =>
-            parseBigInt(dv.getBigUint64(getPointOffset(index) + offset, true))
+            parseBigInt(getBigUint64(dv, getPointOffset(index) + offset, true))
       }
     case 'float':
       switch (length) {

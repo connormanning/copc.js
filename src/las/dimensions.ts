@@ -1,4 +1,4 @@
-import { Dimension, Extractor } from 'utils'
+import { Dimension, Extractor } from '../utils'
 
 import { ExtraBytes } from './extra-bytes'
 

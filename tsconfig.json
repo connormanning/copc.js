@@ -6,7 +6,7 @@
     "outDir": "lib",
 
     "target": "es2017",
-    "module": "commonjs",
+    "module": "esnext",
     "lib": ["es2020", "dom"],
     "declaration": true,
     "declarationMap": true,
