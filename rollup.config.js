@@ -14,7 +14,7 @@ export default {
   external: ['cross-fetch', 'fetch', 'fs', 'path'],
   plugins: [
     nodeResolve(),
-    commonjs({ include: /node_modules\/@landrush\/laz-perf/ }),
+    commonjs({ include: /node_modules\/laz-perf/ }),
     json(),
     typescript({
       tsconfig: './tsconfig.production.json',
