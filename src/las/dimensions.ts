@@ -1,4 +1,6 @@
-import { Dimension, Extractor } from 'utils'
+import { Dimension, Extractor } from '../utils'
+
+import { ExtraBytes } from './extra-bytes'
 
 export const Dimensions = { create }
 
@@ -24,11 +26,18 @@ const typemap: { [name: string]: Dimension | undefined } = {
   Red: Type.uint16,
   Green: Type.uint16,
   Blue: Type.uint16,
+  ScannerChannel: Type.uint8,
+  Infrared: Type.uint16,
 }
-function create(extractor: Extractor.Map) {
+function create(extractor: Extractor.Map, eb: ExtraBytes[] = []) {
   return Object.keys(extractor).reduce<Dimension.Map>((map, name) => {
     const type = typemap[name]
-    if (!type) throw new Error(`Failed to look up LAS type: ${name}`)
-    return { ...map, [name]: type }
+    if (type) return { ...map, [name]: type }
+
+    const e = eb.find((v) => v.name === name)
+    const dimension = e && ExtraBytes.getDimension(e)
+    if (dimension) return { ...map, [name]: dimension }
+
+    throw new Error(`Failed to look up LAS type: ${name}`)
   }, {})
 }

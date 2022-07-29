@@ -13,6 +13,7 @@ export const Bounds = {
   cube,
   step,
   stepTo,
+  intersection,
 }
 
 function min(b: Bounds): Point {
@@ -71,4 +72,15 @@ function stepTo(bounds: Bounds, [d, x, y, z]: Key) {
     bounds = step(bounds, [(x >> i) & 1, (y >> i) & 1, (z >> i) & 1] as Step)
   }
   return bounds
+}
+
+function intersection(a: Bounds, b: Bounds): Bounds {
+  return [
+    Math.max(a[0], b[0]),
+    Math.max(a[1], b[1]),
+    Math.max(a[2], b[2]),
+    Math.min(a[3], b[3]),
+    Math.min(a[4], b[4]),
+    Math.min(a[5], b[5]),
+  ]
 }

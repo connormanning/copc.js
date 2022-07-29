@@ -1,7 +1,7 @@
 import { Step } from './step'
 
 export type Key = [depth: number, x: number, y: number, z: number]
-export const Key = { create, parse, toString, step, compare, depth }
+export const Key = { create, parse, toString, step, up, compare, depth }
 
 // Often at the API level, we want to accept both the string form as well as the
 // array form as a given Key.  So many of these functions work with both.
@@ -37,6 +37,11 @@ function toString(key: Key | string) {
 function step(key: Key | string, [a, b, c]: Step): Key {
   const [d, x, y, z] = Key.create(key)
   return [d + 1, x * 2 + a, y * 2 + b, z * 2 + c]
+}
+
+function up(key: Key | string, n = 1): Key {
+  const [d, x, y, z] = Key.create(key)
+  return [d - n, x >> n, y >> n, z >> n]
 }
 
 function compare(a: Key, b: Key) {

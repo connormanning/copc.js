@@ -1,9 +1,8 @@
-import { Binary, Getter, parseBigInt } from 'utils'
+import { Binary, Getter, getBigUint64, parseBigInt } from '../utils'
 
 import { Header } from './header'
-import { evlrHeaderLength, headerLength, vlrHeaderLength } from './constants'
+import { evlrHeaderLength, vlrHeaderLength } from './constants'
 
-export declare namespace Vlr {}
 export type Vlr = {
   userId: string
   recordId: number
@@ -12,14 +11,38 @@ export type Vlr = {
   description: string
   isExtended: boolean
 }
-type VlrWithoutOffset = Omit<Vlr, 'contentOffset'>
-export const Vlr = { walk, parse }
+export declare namespace Vlr {
+  export type WithoutOffset = Omit<Vlr, 'contentOffset'>
+  export type OffsetInfo = Pick<
+    Header,
+    'headerLength' | 'vlrCount' | 'evlrOffset' | 'evlrCount'
+  >
+}
+export const Vlr = { walk, parse, find, at, fetch }
 
-async function walk(filename: string | Getter, header: Header) {
+function find(vlrs: Vlr[], userId: string, recordId: number) {
+  return vlrs.find((v) => v.userId === userId && v.recordId === recordId)
+}
+
+function at(vlrs: Vlr[], userId: string, recordId: number) {
+  const vlr = find(vlrs, userId, recordId)
+  if (!vlr) throw new Error(`VLR not found: ${userId}/${recordId}`)
+  return vlr
+}
+
+function fetch(
+  filename: string | Getter,
+  { contentOffset, contentLength }: Vlr
+) {
+  const get = Getter.create(filename)
+  return get(contentOffset, contentOffset + contentLength)
+}
+
+async function walk(filename: string | Getter, header: Vlr.OffsetInfo) {
   const get = Getter.create(filename)
   const vlrs = await doWalk({
     get,
-    startOffset: headerLength,
+    startOffset: header.headerLength,
     count: header.vlrCount,
     isExtended: false,
   })
@@ -36,7 +59,7 @@ function parse(buffer: Binary, isExtended?: boolean) {
   return (isExtended ? parseExtended : parseNormal)(buffer)
 }
 
-function parseNormal(buffer: Binary): VlrWithoutOffset {
+function parseNormal(buffer: Binary): Vlr.WithoutOffset {
   const dv = Binary.toDataView(buffer)
   if (dv.byteLength !== vlrHeaderLength) {
     throw new Error(
@@ -53,7 +76,7 @@ function parseNormal(buffer: Binary): VlrWithoutOffset {
   }
 }
 
-function parseExtended(buffer: Binary): VlrWithoutOffset {
+function parseExtended(buffer: Binary): Vlr.WithoutOffset {
   const dv = Binary.toDataView(buffer)
   if (dv.byteLength !== evlrHeaderLength) {
     throw new Error(
@@ -64,7 +87,7 @@ function parseExtended(buffer: Binary): VlrWithoutOffset {
   return {
     userId: Binary.toCString(buffer.slice(2, 18)),
     recordId: dv.getUint16(18, true),
-    contentLength: parseBigInt(dv.getBigUint64(20, true)),
+    contentLength: parseBigInt(getBigUint64(dv, 20, true)),
     description: Binary.toCString(buffer.slice(28, 60)),
     isExtended: true,
   }
@@ -83,7 +106,7 @@ async function doWalk({ get, startOffset, count, isExtended }: DoWalk) {
   const length = isExtended ? evlrHeaderLength : vlrHeaderLength
 
   for (let i = 0; i < count; ++i) {
-    const buffer = await get(pos, pos + length)
+    const buffer = length ? await get(pos, pos + length) : new Uint8Array()
     const { userId, recordId, contentLength, description } = parse(
       buffer,
       isExtended

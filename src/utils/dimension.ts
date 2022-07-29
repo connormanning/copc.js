@@ -11,10 +11,12 @@ export declare namespace Dimension {
 export type Dimension = Dimension.Integral | Dimension.Float
 
 export declare namespace Dimension {
-  export type Map = { [name: string]: Dimension | undefined }
+  export type Map = Record<string, Dimension | undefined>
+  export type Type = Dimension['type']
+  export type Size = Dimension['size']
 }
 
-const Type = {
+const Type: Record<string, Dimension> = {
   int8: { type: 'signed', size: 1 },
   int16: { type: 'signed', size: 2 },
   int32: { type: 'signed', size: 4 },
@@ -31,7 +33,7 @@ const Type = {
   // Minimum size of one byte, so this is a convenience for a byte.
   bool: { type: 'unsigned', size: 1 },
   boolean: { type: 'unsigned', size: 1 },
-} as const
+}
 
 export const Dimension = { Type, ctype }
 
