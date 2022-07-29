@@ -7,8 +7,7 @@
     "build": "rollup -c && ttsc --project tsconfig.production.json --emitDeclarationOnly",
     "tsc": "ttsc --project tsconfig.production.json",
     "prepare": "yarn build",
-    "test": "jest",
-    "webpack": "webpack --config webpack.config.js --mode production"
+    "test": "jest"
   },
   "dependencies": {
     "cross-fetch": "^3.1.5",
@@ -23,7 +22,6 @@
     "@types/jest": "^27.0.1",
     "@types/node": "^16.6.1",
     "@zerollup/ts-transform-paths": "^1.7.18",
-    "copy-webpack-plugin": "^9.0.1",
     "husky": "^7.0.1",
     "jest": "^27.0.6",
     "prettier": "^2.3.2",
@@ -35,9 +33,7 @@
     "ts-node": "^10.2.0",
     "tslib": "^2.3.1",
     "ttypescript": "^1.5.12",
-    "typescript": "^4.5.5",
-    "webpack": "^5.53.0",
-    "webpack-cli": "^4.8.0"
+    "typescript": "^4.5.5"
   },
   "husky": {
     "hooks": {
