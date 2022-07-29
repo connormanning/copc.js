@@ -1,7 +1,7 @@
 {
   "name": "copc",
   "license": "UNLICENSED",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "lib/index.js",
   "scripts": {
     "build": "rollup -c && ttsc --project tsconfig.production.json --emitDeclarationOnly",
