@@ -1,17 +1,17 @@
 {
-  "name": "copc",
-  "license": "UNLICENSED",
-  "version": "0.0.3",
+  "name": "@landrush/copc",
+  "license": "MIT",
+  "version": "0.0.38",
   "main": "lib/index.js",
   "scripts": {
-    "build": "rollup -c && ttsc --project tsconfig.production.json --emitDeclarationOnly",
+    "_build": "rollup -c && ttsc --project tsconfig.production.json --emitDeclarationOnly",
     "tsc": "ttsc --project tsconfig.production.json",
-    "prepare": "yarn build",
+    "_prepare": "yarn build",
     "test": "jest"
   },
   "dependencies": {
     "cross-fetch": "^3.1.5",
-    "laz-perf": "^0.0.3"
+    "laz-perf": "^0.0.5"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.3",
