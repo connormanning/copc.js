@@ -1,4 +1,4 @@
-import { Bounds, Dimension } from 'utils'
+import { Bounds, Dimension } from '../utils'
 
 export type Ept = {
   bounds: Bounds

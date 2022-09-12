@@ -128,10 +128,58 @@ test('view', () => {
   const buffer = Buffer.concat([Buffer.alloc(pointDataRecordLength * 2), p6])
   const view = View.create(buffer, header)
 
+  expect(Object.keys(view.dimensions)).toEqual([
+    'X',
+    'Y',
+    'Z',
+    'Intensity',
+    'ReturnNumber',
+    'NumberOfReturns',
+    'Synthetic',
+    'KeyPoint',
+    'Withheld',
+    'Overlap',
+    'ScannerChannel',
+    'ScanDirectionFlag',
+    'EdgeOfFlightLine',
+    'Classification',
+    'UserData',
+    'ScanAngle',
+    'PointSourceId',
+    'GpsTime',
+  ])
+
   expect(view.getter('X')(2)).toEqual(X)
   expect(view.getter('Y')(2)).toEqual(Y)
   expect(view.getter('Z')(2)).toEqual(Z)
+  expect(view.getter('Intensity')(2)).toEqual(Intensity)
   expect(view.getter('GpsTime')(2)).toEqual(GpsTime)
+
+  expect(() => view.getter('Nothing')).toThrow(/Nothing/)
+  expect(() => View.create(buffer.slice(0, -1), header)).toThrow(/length/i)
+  expect(() => view.getter('X')(3)).toThrow(/range/i)
+})
+
+test('include', () => {
+  const pointDataRecordFormat = 6
+  const pointDataRecordLength = 30
+  const header = {
+    pointDataRecordFormat,
+    pointDataRecordLength,
+    scale,
+    offset,
+  }
+
+  const buffer = Buffer.concat([Buffer.alloc(pointDataRecordLength * 2), p6])
+  const view = View.create(buffer, header, [], ['X', 'Y', 'Intensity'])
+
+  expect(Object.keys(view.dimensions)).toEqual(['X', 'Y', 'Intensity'])
+
+  expect(view.getter('X')(2)).toEqual(X)
+  expect(view.getter('Y')(2)).toEqual(Y)
+  expect(view.getter('Intensity')(2)).toEqual(Intensity)
+  expect(() => view.getter('Z')(2)).toThrow(/Z/)
+  expect(() => view.getter('GpsTime')(2)).toThrow(/GpsTime/)
 
   expect(() => view.getter('Nothing')).toThrow(/Nothing/)
   expect(() => View.create(buffer.slice(0, -1), header)).toThrow(/length/i)

@@ -5,8 +5,8 @@
     "rootDir": "src",
     "outDir": "lib",
 
-    "target": "es2017",
-    "module": "esnext",
+    "target": "es2019",
+    "module": "commonjs",
     "lib": ["es2020", "dom"],
     "declaration": true,
     "declarationMap": true,

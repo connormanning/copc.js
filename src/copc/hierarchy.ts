@@ -1,4 +1,4 @@
-import { Binary, Getter, Key, getBigUint64, parseBigInt } from 'utils'
+import { Binary, Getter, Key, getBigUint64, parseBigInt } from '../utils'
 
 import { hierarchyItemLength } from './constants'
 

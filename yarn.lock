@@ -2113,10 +2113,10 @@ kleur@^3.0.3:
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
 
-laz-perf@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/laz-perf/-/laz-perf-0.0.3.tgz#1ebe35925346f0ee6f95b2d65322c10699dfed9f"
-  integrity sha512-U/2XFWNgwfKVH3+QvnNvWkYroC3DB298eZuuxxMrEFnMr5fHIlcsqeLryR5fzx/2kcM8ILNbluZrOLKWqaS0OA==
+laz-perf@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/laz-perf/-/laz-perf-0.0.5.tgz#c19f273cd91f7589d8c6fe21a721713cd26798c9"
+  integrity sha512-unnaoahcikJ+AwOm6BhN0JYi2vRhMF7fns28HIsgIw/o0Gwhaizqoc/+txA397/5oUHlljaCIrwSatzrEKlxJQ==
 
 leven@^3.1.0:
   version "3.1.0"

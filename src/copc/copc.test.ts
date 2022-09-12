@@ -55,3 +55,42 @@ test('data', async () => {
   expect(max[1]).toBeLessThanOrEqual(copc.header.max[1])
   expect(max[2]).toBeLessThanOrEqual(copc.header.max[2])
 })
+
+test('include', async () => {
+  const copc = await Copc.create(filename)
+  const { nodes } = await Copc.loadHierarchyPage(
+    filename,
+    copc.info.rootHierarchyPage
+  )
+  const { ['0-0-0-0']: root } = nodes
+  if (!root) throw new Error('Failed to load hierarchy root node')
+  const view = await Copc.loadPointDataView(filename, copc, root, {
+    include: ['X', 'Y', 'Z', 'Intensity'],
+  })
+
+  expect(view.dimensions).toEqual<Dimension.Map>({
+    X: { type: 'float', size: 8 },
+    Y: { type: 'float', size: 8 },
+    Z: { type: 'float', size: 8 },
+    Intensity: { type: 'unsigned', size: 2 },
+  })
+  const xyz = [view.getter('X'), view.getter('Y'), view.getter('Z')]
+
+  expect(view.getter('Intensity')).not.toThrow()
+  expect(() => view.getter('GpsTime')).toThrow(/GpsTime/)
+
+  let min = [Infinity, Infinity, Infinity]
+  let max = [-Infinity, -Infinity, -Infinity]
+  for (let i = 0; i < view.pointCount; ++i) {
+    const p = xyz.map((get) => get(i))
+    min = p.map((v, i) => Math.min(v, min[i]))
+    max = p.map((v, i) => Math.max(v, max[i]))
+  }
+
+  expect(min[0]).toBeGreaterThanOrEqual(copc.header.min[0])
+  expect(min[1]).toBeGreaterThanOrEqual(copc.header.min[1])
+  expect(min[2]).toBeGreaterThanOrEqual(copc.header.min[2])
+  expect(max[0]).toBeLessThanOrEqual(copc.header.max[0])
+  expect(max[1]).toBeLessThanOrEqual(copc.header.max[1])
+  expect(max[2]).toBeLessThanOrEqual(copc.header.max[2])
+})

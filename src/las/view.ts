@@ -10,9 +10,20 @@ export const View = { create }
 function create(
   buffer: Binary,
   header: Extractor.PartialHeader,
-  eb: ExtraBytes[] = []
+  eb: ExtraBytes[] = [],
+  include?: string[]
 ): Utils.View {
-  const extractors = Extractor.create(header, eb)
+  let extractors = Extractor.create(header, eb)
+  if (include) {
+    const set = new Set([...include])
+    extractors = Object.entries(extractors).reduce<Utils.Extractor.Map>(
+      (extractors, [name, getter]) => {
+        if (set.has(name)) extractors[name] = getter
+        return extractors
+      },
+      {}
+    )
+  }
   const dimensions = Dimensions.create(extractors, eb)
   const dv = Binary.toDataView(buffer)
 

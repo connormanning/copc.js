@@ -1,12 +1,11 @@
 {
-  "name": "@landrush/copc",
+  "name": "copc",
   "license": "MIT",
-  "version": "0.0.38",
+  "version": "0.0.4",
   "main": "lib/index.js",
   "scripts": {
-    "_build": "rollup -c && ttsc --project tsconfig.production.json --emitDeclarationOnly",
-    "tsc": "ttsc --project tsconfig.production.json",
-    "_prepare": "yarn build",
+    "build": "ttsc --project tsconfig.production.json",
+    "prepare": "yarn build",
     "test": "jest"
   },
   "dependencies": {

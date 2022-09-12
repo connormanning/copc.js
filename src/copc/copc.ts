@@ -1,6 +1,6 @@
 import type { LazPerf } from 'laz-perf'
-import * as Las from 'las'
-import { Binary, Getter } from 'utils'
+import * as Las from '../las'
+import { Binary, Getter } from '../utils'
 
 import { Hierarchy } from './hierarchy'
 import { Info } from './info'
@@ -74,12 +74,13 @@ async function loadPointDataBuffer(
   )
 }
 
+type Options = { lazPerf?: LazPerf; include?: string[] }
 async function loadPointDataView(
   filename: string | Getter,
   copc: Copc,
   node: Hierarchy.Node,
-  lazPerf?: LazPerf
+  { lazPerf, include }: Options = {}
 ) {
   const buffer = await loadPointDataBuffer(filename, copc.header, node, lazPerf)
-  return Las.View.create(buffer, copc.header, copc.eb)
+  return Las.View.create(buffer, copc.header, copc.eb, include)
 }

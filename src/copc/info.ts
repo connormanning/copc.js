@@ -1,4 +1,4 @@
-import { Bounds, Binary, Point, getBigUint64, parseBigInt } from 'utils'
+import { Bounds, Binary, Point, getBigUint64, parseBigInt } from '../utils'
 
 import { infoLength } from './constants'
 import type { Hierarchy } from './hierarchy'
