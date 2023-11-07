@@ -1,8 +1,7 @@
 import fetch from 'cross-fetch'
-// import 'cross-fetch/polyfill'
 
 export type Getter = (begin: number, end: number) => Promise<Uint8Array>
-export const Getter = { create }
+export const Getter = { create, http: getHttpGetter, file: getFsGetter }
 
 function create(arg: string | Getter): Getter {
   if (typeof arg === 'function') return arg
