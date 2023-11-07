@@ -102,7 +102,7 @@ function parse(buffer: Binary): Header {
 
 function parseNumberOfPointsByReturn(buffer: Binary): number[] {
   const dv = Binary.toDataView(buffer)
-  const bigs: BigInt[] = []
+  const bigs: bigint[] = []
   for (let offset = 0; offset < 15 * 8; offset += 8) {
     bigs.push(getBigUint64(dv, offset, true))
   }

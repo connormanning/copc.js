@@ -1,4 +1,4 @@
-export function parseBigInt(v: BigInt) {
+export function parseBigInt(v: bigint) {
   if (
     v > BigInt(Number.MAX_SAFE_INTEGER) ||
     v < BigInt(-Number.MAX_SAFE_INTEGER)
