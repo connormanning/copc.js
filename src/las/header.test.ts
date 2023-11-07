@@ -19,7 +19,7 @@ test('header', () => {
   const pointDataRecordFormat = 6
   const pointDataRecordLength = 50
   const legacyPointCount = 555 // Ignored, non-legacy version will be used.
-  const legacyPointCountByReturn = [1,2,3,4,5] // Also ignored.
+  const legacyPointCountByReturn = [1, 2, 3, 4, 5] // Also ignored.
   const scale: Point = [0.1, 0.01, 0.001]
   const offset: Point = [100, 200, 300]
   const min: Point = [1, 2, 3]
@@ -99,7 +99,7 @@ test('header', () => {
     max,
     waveformDataOffset,
     evlrOffset,
-    evlrCount
+    evlrCount,
   })
 
   const invalidFileSignature = Buffer.from(b)

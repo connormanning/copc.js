@@ -33,7 +33,14 @@ async function create(filename: string | Getter): Promise<Copc> {
 
   let wkt: string | undefined
   const wktVlr = Las.Vlr.find(vlrs, 'LASF_Projection', 2112)
-  if (wktVlr) wkt = Binary.toCString(await Las.Vlr.fetch(get, wktVlr))
+  // There are a few corner-case possibilities here.  Although the LAS 1.4 spec
+  // says that this must be a null-terminated string, some files in the wild
+  // exist with a zero content-length.  We also want to consider the case of an
+  // empty string which *does* include null-termination as a missing SRS.
+  if (wktVlr && wktVlr.contentLength) {
+    wkt = Binary.toCString(await Las.Vlr.fetch(get, wktVlr))
+    if (wkt === '') wkt = undefined
+  }
 
   let eb: Las.ExtraBytes[] = []
   const ebVlr = Las.Vlr.find(vlrs, 'LASF_Spec', 4)

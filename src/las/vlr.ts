@@ -34,6 +34,7 @@ function fetch(
   filename: string | Getter,
   { contentOffset, contentLength }: Vlr
 ) {
+  if (contentLength === 0) return new Uint8Array()
   const get = Getter.create(filename)
   return get(contentOffset, contentOffset + contentLength)
 }
