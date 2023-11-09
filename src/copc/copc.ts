@@ -23,7 +23,20 @@ export const Copc = {
  * Parse the COPC header and walk VLR and EVLR metadata.
  */
 async function create(filename: string | Getter): Promise<Copc> {
-  const get = Getter.create(filename)
+  const getRemote = Getter.create(filename)
+
+  // This is an optimization for the walking of VLRs - we'll grab a fixed size 
+  // buffer which is larger than the LAS header, and for subsequent requests
+  // which fall within this buffer range, we can simply slice out the bytes
+  // rather than making another remote fetch.
+  const length = 65536
+  const promise = getRemote(0, length)
+  async function get(begin: number, end: number) {
+    if (end >= length) return getRemote(begin, end)
+    const head = await promise
+    return head.slice(begin, end)
+  }
+
   const header = Las.Header.parse(await get(0, Las.Constants.minHeaderLength))
   const vlrs = await Las.Vlr.walk(get, header)
 
