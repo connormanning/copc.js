@@ -12,7 +12,7 @@ jobs:
     - name: test
       uses: actions/setup-node@v1
       with:
-        node-version: '12.x'
+        node-version: '18.x'
     - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
       env:
         NPM_TOKEN: ${{secrets.NPM_TOKEN}}
