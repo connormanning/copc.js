@@ -45,9 +45,6 @@ function up(key: Key | string, n = 1): Key {
 }
 
 function compare(a: Key, b: Key) {
-	if (a[0] < b[0]) return -1
-	if (a[0] > b[0]) return 1
-
 	for (let i = 0; i < a.length; ++i) {
 		if (a[i] < b[i]) return -1
 		if (a[i] > b[i]) return 1
