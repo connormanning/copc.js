@@ -29,5 +29,8 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
+  },
+  "browser": {
+      "fs": false
   }
 }
