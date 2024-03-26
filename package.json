@@ -1,7 +1,7 @@
 {
   "name": "copc",
   "license": "MIT",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc --project tsconfig.production.json && tsc-alias",
@@ -31,6 +31,6 @@
     }
   },
   "browser": {
-      "fs": false
+    "fs": false
   }
 }

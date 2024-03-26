@@ -91,7 +91,7 @@ test('parse invalid', () => {
 
   const b = pack({ key, pointCount: 1, pointDataOffset, pointDataLength })
   expect(() => Hierarchy.parse(Buffer.concat([b, Buffer.alloc(1)]))).toThrow(
-    /length/i
+    /length/i,
   )
-  expect(() => Hierarchy.parse(b.slice(0, -1))).toThrow(/length/i)
+  expect(() => Hierarchy.parse(b.subarray(0, -1))).toThrow(/length/i)
 })
