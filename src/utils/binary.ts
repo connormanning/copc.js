@@ -2,7 +2,7 @@ export type Binary = Uint8Array
 export const Binary = { toDataView, toCString }
 
 export function toDataView(buffer: Binary): DataView {
-	return new DataView(buffer.buffer, buffer.byteOffset, buffer.length)
+  return new DataView(buffer.buffer, buffer.byteOffset, buffer.length)
 }
 
 export function toCString(buffer: Binary): string {

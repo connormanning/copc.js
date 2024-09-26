@@ -16,7 +16,7 @@ function parse(buffer: Binary): Info {
 
   if (dv.byteLength !== infoLength) {
     throw new Error(
-      `Invalid COPC info VLR length (should be ${infoLength}): ${dv.byteLength}`
+      `Invalid COPC info VLR length (should be ${infoLength}): ${dv.byteLength}`,
     )
   }
 

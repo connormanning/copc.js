@@ -11,6 +11,6 @@ function parse(e: Hierarchy): BaseHierarchy.Subtree {
       else if (pointCount) h.nodes[keystring] = { pointCount }
       return h
     },
-    { nodes: {}, pages: {} }
+    { nodes: {}, pages: {} },
   )
 }

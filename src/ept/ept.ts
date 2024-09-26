@@ -9,10 +9,10 @@ export type Ept = {
   schema: (Dimension & { name: string })[]
   span: number
   srs?: {
-		wkt?: string
-		authority?: string
-		horizontal?: string
-		vertical?: string
-	}
+    wkt?: string
+    authority?: string
+    horizontal?: string
+    vertical?: string
+  }
   version: '1.0.0' | '1.1.0'
 }

@@ -11,7 +11,7 @@ function create(
   buffer: Binary,
   header: Extractor.PartialHeader,
   eb: ExtraBytes[] = [],
-  include?: string[]
+  include?: string[],
 ): Utils.View {
   let extractors = Extractor.create(header, eb)
   if (include) {
@@ -21,7 +21,7 @@ function create(
         if (set.has(name)) extractors[name] = getter
         return extractors
       },
-      {}
+      {},
     )
   }
   const dimensions = Dimensions.create(extractors, eb)
@@ -31,7 +31,7 @@ function create(
 
   if (dv.byteLength % pointLength !== 0) {
     throw new Error(
-      `Invalid buffer length (${dv.byteLength}) for point length ${pointLength}`
+      `Invalid buffer length (${dv.byteLength}) for point length ${pointLength}`,
     )
   }
   const pointCount = dv.byteLength / header.pointDataRecordLength
@@ -42,7 +42,7 @@ function create(
     return function (index) {
       if (index >= pointCount) {
         throw new RangeError(
-          `View index (${index}) out of range: ${pointCount}`
+          `View index (${index}) out of range: ${pointCount}`,
         )
       }
       return extractor(dv, index)

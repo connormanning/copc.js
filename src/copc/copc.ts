@@ -25,7 +25,7 @@ export const Copc = {
 async function create(filename: string | Getter): Promise<Copc> {
   const getRemote = Getter.create(filename)
 
-  // This is an optimization for the walking of VLRs - we'll grab a fixed size 
+  // This is an optimization for the walking of VLRs - we'll grab a fixed size
   // buffer which is larger than the LAS header, and for subsequent requests
   // which fall within this buffer range, we can simply slice out the bytes
   // rather than making another remote fetch.
@@ -64,7 +64,7 @@ async function create(filename: string | Getter): Promise<Copc> {
 
 async function loadHierarchyPage(
   filename: string | Getter,
-  page: Hierarchy.Page
+  page: Hierarchy.Page,
 ) {
   const get = Getter.create(filename)
   return Hierarchy.load(get, page)
@@ -72,7 +72,7 @@ async function loadHierarchyPage(
 
 async function loadCompressedPointDataBuffer(
   filename: string | Getter,
-  { pointDataOffset, pointDataLength }: Hierarchy.Node
+  { pointDataOffset, pointDataLength }: Hierarchy.Node,
 ) {
   const get = Getter.create(filename)
   return get(pointDataOffset, pointDataOffset + pointDataLength)
@@ -82,7 +82,7 @@ async function loadPointDataBuffer(
   filename: string | Getter,
   { pointDataRecordFormat, pointDataRecordLength }: Las.Header,
   node: Hierarchy.Node,
-  lazPerf?: LazPerf
+  lazPerf?: LazPerf,
 ) {
   const compressed = await loadCompressedPointDataBuffer(filename, node)
 
@@ -90,7 +90,7 @@ async function loadPointDataBuffer(
   return Las.PointData.decompressChunk(
     compressed,
     { pointCount, pointDataRecordFormat, pointDataRecordLength },
-    lazPerf
+    lazPerf,
   )
 }
 
@@ -99,7 +99,7 @@ async function loadPointDataView(
   filename: string | Getter,
   copc: Copc,
   node: Hierarchy.Node,
-  { lazPerf, include }: Options = {}
+  { lazPerf, include }: Options = {},
 ) {
   const buffer = await loadPointDataBuffer(filename, copc.header, node, lazPerf)
   return Las.View.create(buffer, copc.header, copc.eb, include)

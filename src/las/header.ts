@@ -47,7 +47,7 @@ function parse(buffer: Binary): Header {
   const minorVersion = dv.getUint8(25)
   if (majorVersion !== 1 || (minorVersion !== 2 && minorVersion !== 4)) {
     throw new Error(
-      `Invalid version (only 1.2 and 1.4 supported): ${majorVersion}.${minorVersion}`
+      `Invalid version (only 1.2 and 1.4 supported): ${majorVersion}.${minorVersion}`,
     )
   }
 
@@ -69,7 +69,7 @@ function parse(buffer: Binary): Header {
     pointDataRecordLength: dv.getUint16(105, true),
     pointCount: dv.getUint32(107, true),
     pointCountByReturn: parseLegacyNumberOfPointsByReturn(
-      buffer.slice(111, 131)
+      buffer.slice(111, 131),
     ),
     scale: parsePoint(buffer.slice(131, 155)),
     offset: parsePoint(buffer.slice(155, 179)),

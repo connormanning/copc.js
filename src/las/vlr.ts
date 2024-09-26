@@ -32,7 +32,7 @@ function at(vlrs: Vlr[], userId: string, recordId: number) {
 
 function fetch(
   filename: string | Getter,
-  { contentOffset, contentLength }: Vlr
+  { contentOffset, contentLength }: Vlr,
 ) {
   if (contentLength === 0) return new Uint8Array()
   const get = Getter.create(filename)
@@ -64,7 +64,7 @@ function parseNormal(buffer: Binary): Vlr.WithoutOffset {
   const dv = Binary.toDataView(buffer)
   if (dv.byteLength !== vlrHeaderLength) {
     throw new Error(
-      `Invalid VLR header length (must be ${vlrHeaderLength}): ${dv.byteLength}`
+      `Invalid VLR header length (must be ${vlrHeaderLength}): ${dv.byteLength}`,
     )
   }
 
@@ -81,7 +81,7 @@ function parseExtended(buffer: Binary): Vlr.WithoutOffset {
   const dv = Binary.toDataView(buffer)
   if (dv.byteLength !== evlrHeaderLength) {
     throw new Error(
-      `Invalid EVLR header length (must be ${evlrHeaderLength}): ${dv.byteLength}`
+      `Invalid EVLR header length (must be ${evlrHeaderLength}): ${dv.byteLength}`,
     )
   }
 
@@ -110,7 +110,7 @@ async function doWalk({ get, startOffset, count, isExtended }: DoWalk) {
     const buffer = length ? await get(pos, pos + length) : new Uint8Array()
     const { userId, recordId, contentLength, description } = parse(
       buffer,
-      isExtended
+      isExtended,
     )
     vlrs.push({
       userId,

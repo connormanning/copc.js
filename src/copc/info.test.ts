@@ -41,6 +41,6 @@ test('info', () => {
   })
 
   expect(() => Info.parse(Buffer.concat([buffer, Buffer.alloc(1)]))).toThrow(
-    /length/i
+    /length/i,
   )
 })

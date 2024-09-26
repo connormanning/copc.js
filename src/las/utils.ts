@@ -25,6 +25,6 @@ export function formatGuid(buffer: Binary): string {
   }
 
   return [s.slice(0, 8), s.slice(8, 12), s.slice(12, 16), s.slice(16, 32)].join(
-    '-'
+    '-',
   )
 }

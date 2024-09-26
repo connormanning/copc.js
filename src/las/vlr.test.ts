@@ -129,6 +129,6 @@ test('at', () => {
 
 test('fetch', async () => {
   expect(await Vlr.fetch(getter, Vlr.at(vlrs, 'B', 1))).toEqual(
-    Buffer.alloc(b.contentLength, 'b')
+    Buffer.alloc(b.contentLength, 'b'),
   )
 })

@@ -23,7 +23,7 @@ async function getLazPerf(suppliedLazPerf?: LazPerf): Promise<LazPerf> {
 export async function decompressChunk(
   compressed: Binary,
   { pointCount, pointDataRecordFormat, pointDataRecordLength }: ChunkMetadata,
-  suppliedLazPerf?: LazPerf
+  suppliedLazPerf?: LazPerf,
 ): Promise<Binary> {
   const LazPerf = await getLazPerf(suppliedLazPerf)
   const outBuffer = new Uint8Array(pointCount * pointDataRecordLength)
@@ -37,9 +37,9 @@ export async function decompressChunk(
       new Uint8Array(
         compressed.buffer,
         compressed.byteOffset,
-        compressed.byteLength
+        compressed.byteLength,
       ),
-      blobPointer
+      blobPointer,
     )
 
     decoder.open(pointDataRecordFormat, pointDataRecordLength, blobPointer)
@@ -51,9 +51,9 @@ export async function decompressChunk(
         new Uint8Array(
           LazPerf.HEAPU8.buffer,
           dataPointer,
-          pointDataRecordLength
+          pointDataRecordLength,
         ),
-        i * pointDataRecordLength
+        i * pointDataRecordLength,
       )
     }
   } finally {
@@ -67,7 +67,7 @@ export async function decompressChunk(
 
 export async function decompressFile(
   file: Binary,
-  suppliedLazPerf?: LazPerf
+  suppliedLazPerf?: LazPerf,
 ): Promise<Binary> {
   const LazPerf = await getLazPerf(suppliedLazPerf)
   const header = Header.parse(file)
@@ -80,7 +80,7 @@ export async function decompressFile(
   try {
     LazPerf.HEAPU8.set(
       new Uint8Array(file.buffer, file.byteOffset, file.byteLength),
-      blobPointer
+      blobPointer,
     )
 
     reader.open(blobPointer, file.byteLength)
@@ -92,9 +92,9 @@ export async function decompressFile(
         new Uint8Array(
           LazPerf.HEAPU8.buffer,
           dataPointer,
-          pointDataRecordLength
+          pointDataRecordLength,
         ),
-        i * pointDataRecordLength
+        i * pointDataRecordLength,
       )
     }
   } finally {

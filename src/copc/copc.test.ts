@@ -9,7 +9,7 @@ test('data', async () => {
   const copc = await Copc.create(filename)
   const { nodes } = await Copc.loadHierarchyPage(
     filename,
-    copc.info.rootHierarchyPage
+    copc.info.rootHierarchyPage,
   )
   const { ['0-0-0-0']: root } = nodes
   if (!root) throw new Error('Failed to load hierarchy root node')
@@ -60,7 +60,7 @@ test('include', async () => {
   const copc = await Copc.create(filename)
   const { nodes } = await Copc.loadHierarchyPage(
     filename,
-    copc.info.rootHierarchyPage
+    copc.info.rootHierarchyPage,
   )
   const { ['0-0-0-0']: root } = nodes
   if (!root) throw new Error('Failed to load hierarchy root node')

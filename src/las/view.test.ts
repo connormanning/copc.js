@@ -62,11 +62,11 @@ p0.writeUInt8(
     (NumberOfReturns << 3) |
     (ScanDirectionFlag << 6) |
     (EdgeOfFlightLine << 7),
-  14
+  14,
 )
 p0.writeUInt8(
   Classification | (Synthetic << 5) | (KeyPoint << 6) | (Withheld << 7),
-  15
+  15,
 )
 p0.writeInt8(ScanAngle, 16)
 p0.writeUInt8(UserData, 17)
@@ -99,7 +99,7 @@ p6.writeUInt8(
     (ScannerChannel << 4) |
     (ScanDirectionFlag << 6) |
     (EdgeOfFlightLine << 7),
-  15
+  15,
 )
 p6.writeUInt8(Classification, 16)
 p6.writeUInt8(UserData, 17)

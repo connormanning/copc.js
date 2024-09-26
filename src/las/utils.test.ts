@@ -12,13 +12,13 @@ test('parse point', () => {
 
   expect(() => parsePoint(Buffer.alloc(0))).toThrow(/length/i)
   expect(() => parsePoint(Buffer.concat([b, Buffer.alloc(1)]))).toThrow(
-    /length/i
+    /length/i,
   )
 })
 
 test('format guid', () => {
   expect(formatGuid(Buffer.alloc(16))).toEqual(
-    '00000000-0000-0000-0000000000000000'
+    '00000000-0000-0000-0000000000000000',
   )
 
   const b = Buffer.alloc(16)
@@ -28,6 +28,6 @@ test('format guid', () => {
   b.writeUInt32LE(0x89abcdef, 12)
   expect(formatGuid(b)).toEqual('01234567-89ab-cdef-0123456789abcdef')
 
-	expect(() => formatGuid(Buffer.alloc(0))).toThrow(/length/i)
-	expect(() => formatGuid(Buffer.alloc(17))).toThrow(/length/i)
+  expect(() => formatGuid(Buffer.alloc(0))).toThrow(/length/i)
+  expect(() => formatGuid(Buffer.alloc(17))).toThrow(/length/i)
 })

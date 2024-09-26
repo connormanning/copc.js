@@ -43,7 +43,7 @@ function getBasePointLength(pdrf: number): number {
 function createAbsoluteExtraBytesExtractor(
   header: Extractor.PartialHeader,
   offset: number, // Offset within the point, so should be >= the base pdrf size.
-  { type, length }: ExtraBytes
+  { type, length }: ExtraBytes,
 ): ExtractorType | undefined {
   const getPointOffset = getPointOffsetGetter(header)
 
@@ -99,7 +99,7 @@ function createExtras(header: Extractor.PartialHeader, eb: ExtraBytes[]) {
     const absoluteExtractor = createAbsoluteExtraBytesExtractor(
       header,
       offset,
-      v
+      v,
     )
 
     if (!absoluteExtractor) return map
@@ -156,19 +156,19 @@ function create0(header: Extractor.PartialHeader): ExtractorType.Map {
       Scale.unapply(
         dv.getInt32(getPointOffset(index), true),
         scale[0],
-        offset[0]
+        offset[0],
       ),
     Y: (dv, index) =>
       Scale.unapply(
         dv.getInt32(getPointOffset(index) + 4, true),
         scale[1],
-        offset[1]
+        offset[1],
       ),
     Z: (dv, index) =>
       Scale.unapply(
         dv.getInt32(getPointOffset(index) + 8, true),
         scale[2],
-        offset[2]
+        offset[2],
       ),
     Intensity: (dv, index) => dv.getUint16(getPointOffset(index) + 12, true),
     ReturnNumber: (dv, index) => getScanFlags(dv, index) & 0b0000_0111,
@@ -242,19 +242,19 @@ function create6(header: Extractor.PartialHeader): ExtractorType.Map {
       Scale.unapply(
         dv.getInt32(getPointOffset(index), true),
         scale[0],
-        offset[0]
+        offset[0],
       ),
     Y: (dv, index) =>
       Scale.unapply(
         dv.getInt32(getPointOffset(index) + 4, true),
         scale[1],
-        offset[1]
+        offset[1],
       ),
     Z: (dv, index) =>
       Scale.unapply(
         dv.getInt32(getPointOffset(index) + 8, true),
         scale[2],
-        offset[2]
+        offset[2],
       ),
     Intensity: (dv, index) => dv.getUint16(getPointOffset(index) + 12, true),
     ReturnNumber: (dv, index) =>

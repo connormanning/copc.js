@@ -13,12 +13,12 @@ export function parseBigInt(v: bigint) {
 export function getBigUint64(
   dv: DataView,
   byteOffset: number,
-  littleEndian?: boolean
+  littleEndian?: boolean,
 ) {
-	if (dv.getBigUint64) return dv.getBigUint64(byteOffset, littleEndian)
+  if (dv.getBigUint64) return dv.getBigUint64(byteOffset, littleEndian)
 
-	const [h, l] = littleEndian ? [4, 0] : [0, 4]
-	const wh = BigInt(dv.getUint32(byteOffset + h, littleEndian))
-	const wl = BigInt(dv.getUint32(byteOffset + l, littleEndian))
-	return (wh << BigInt(32)) + wl
+  const [h, l] = littleEndian ? [4, 0] : [0, 4]
+  const wh = BigInt(dv.getUint32(byteOffset + h, littleEndian))
+  const wl = BigInt(dv.getUint32(byteOffset + l, littleEndian))
+  return (wh << BigInt(32)) + wl
 }
