@@ -15,6 +15,7 @@ export type Copc = {
 export const Copc = {
   create,
   loadHierarchyPage,
+  loadCompressedPointDataBuffer,
   loadPointDataBuffer,
   loadPointDataView,
 }
