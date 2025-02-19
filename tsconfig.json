@@ -7,7 +7,7 @@
 
     "target": "es2019",
     "module": "commonjs",
-    "lib": ["es2020", "dom"],
+    "lib": ["es2023", "dom"],
     "declaration": true,
     "declarationMap": true,
 
