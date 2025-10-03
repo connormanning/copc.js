@@ -5,8 +5,8 @@
     "rootDir": "src",
     "outDir": "lib",
 
-    "target": "es2019",
-    "module": "commonjs",
+    "target": "es2022",
+    "module": "es2022",
     "lib": ["es2023", "dom"],
     "declaration": true,
     "declarationMap": true,
