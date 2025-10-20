@@ -104,8 +104,8 @@ function parseOne(buffer: Binary): ExtraBytes {
   if (options.hasNodata) eb.nodata = extractAnyType(40)
   if (options.hasMin) eb.min = extractAnyType(64)
   if (options.hasMax) eb.max = extractAnyType(88)
-  if (options.hasScale) eb.scale = dv.getFloat64(112)
-  if (options.hasOffset) eb.offset = dv.getFloat64(136)
+  if (options.hasScale) eb.scale = dv.getFloat64(112, true)
+  if (options.hasOffset) eb.offset = dv.getFloat64(136, true)
   return eb
 }
 
