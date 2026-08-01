@@ -28,11 +28,15 @@ export async function decompressChunk(
   const LazPerf = await getLazPerf(suppliedLazPerf)
   const outBuffer = new Uint8Array(pointCount * pointDataRecordLength)
 
-  const blobPointer = LazPerf._malloc(compressed.byteLength)
-  const dataPointer = LazPerf._malloc(pointDataRecordLength)
-  const decoder = new LazPerf.ChunkDecoder()
+  let blobPointer = 0
+  let dataPointer = 0
+  let decoder: InstanceType<typeof LazPerf.ChunkDecoder> | undefined
 
   try {
+    blobPointer = LazPerf._malloc(compressed.byteLength)
+    dataPointer = LazPerf._malloc(pointDataRecordLength)
+    decoder = new LazPerf.ChunkDecoder()
+
     LazPerf.HEAPU8.set(
       new Uint8Array(
         compressed.buffer,
@@ -59,7 +63,7 @@ export async function decompressChunk(
   } finally {
     LazPerf._free(blobPointer)
     LazPerf._free(dataPointer)
-    decoder.delete()
+    decoder?.delete()
   }
 
   return outBuffer
@@ -74,10 +78,15 @@ export async function decompressFile(
   const { pointCount, pointDataRecordLength } = header
   const outBuffer = new Uint8Array(pointCount * pointDataRecordLength)
 
-  const blobPointer = LazPerf._malloc(file.byteLength)
-  const dataPointer = LazPerf._malloc(pointDataRecordLength)
-  const reader = new LazPerf.LASZip()
+  let blobPointer = 0
+  let dataPointer = 0
+  let reader: InstanceType<typeof LazPerf.LASZip> | undefined
+
   try {
+    blobPointer = LazPerf._malloc(file.byteLength)
+    dataPointer = LazPerf._malloc(pointDataRecordLength)
+    reader = new LazPerf.LASZip()
+
     LazPerf.HEAPU8.set(
       new Uint8Array(file.buffer, file.byteOffset, file.byteLength),
       blobPointer,
@@ -98,7 +107,9 @@ export async function decompressFile(
       )
     }
   } finally {
-    reader.delete()
+    LazPerf._free(blobPointer)
+    LazPerf._free(dataPointer)
+    reader?.delete()
   }
 
   return outBuffer
