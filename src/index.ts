@@ -1,4 +1,4 @@
-export * as Ept from './ept'
-export * from './copc'
-export * as Las from './las'
-export * from './utils'
+export * as Ept from './ept/index.js'
+export * from './copc/index.js'
+export * as Las from './las/index.js'
+export * from './utils/index.js'

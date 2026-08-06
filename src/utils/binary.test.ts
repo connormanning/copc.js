@@ -1,4 +1,4 @@
-import { Binary } from '.'
+import { Binary } from './index.js'
 
 test('to data view', () => {
   const buffer = Buffer.from('asdf')

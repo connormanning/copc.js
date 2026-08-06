@@ -1,4 +1,4 @@
-import { Scale } from './scale'
+import { Scale } from './scale.js'
 
 test('apply', () => {
   expect(Scale.apply(100)).toEqual(100)

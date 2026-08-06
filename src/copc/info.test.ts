@@ -1,6 +1,6 @@
-import { Bounds, Range } from 'utils'
+import { Bounds, Range } from '../utils/index.js'
 
-import { Info } from './info'
+import { Info } from './info.js'
 
 test('info', () => {
   const buffer = Buffer.alloc(160)

@@ -1,4 +1,4 @@
-import { parsePoint, formatGuid } from './utils'
+import { parsePoint, formatGuid } from './utils.js'
 
 test('parse point', () => {
   const x = -42

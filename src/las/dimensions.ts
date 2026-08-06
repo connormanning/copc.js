@@ -1,6 +1,6 @@
-import { Dimension, Extractor } from '../utils'
+import { Dimension, Extractor } from '../utils/index.js'
 
-import { ExtraBytes } from './extra-bytes'
+import { ExtraBytes } from './extra-bytes.js'
 
 export const Dimensions = { create }
 

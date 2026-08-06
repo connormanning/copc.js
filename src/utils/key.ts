@@ -1,4 +1,4 @@
-import { Step } from './step'
+import { Step } from './step.js'
 
 export type Key = [depth: number, x: number, y: number, z: number]
 export const Key = { create, parse, toString, step, up, compare, depth }

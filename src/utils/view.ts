@@ -1,4 +1,4 @@
-import { Dimension } from './dimension'
+import { Dimension } from './dimension.js'
 
 export declare namespace View {
   export type Getter = (index: number) => number

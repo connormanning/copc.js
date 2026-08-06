@@ -1,9 +1,9 @@
-import { Binary } from '../utils'
-import * as Utils from '../utils'
+import { Binary } from '../utils/index.js'
+import * as Utils from '../utils/index.js'
 
-import { Dimensions } from './dimensions'
-import { ExtraBytes } from './extra-bytes'
-import { Extractor } from './extractor'
+import { Dimensions } from './dimensions.js'
+import { ExtraBytes } from './extra-bytes.js'
+import { Extractor } from './extractor.js'
 
 export const View = { create }
 

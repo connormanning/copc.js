@@ -1,6 +1,6 @@
-import { Binary, Getter, Key, getBigUint64, parseBigInt } from '../utils'
+import { Binary, Getter, Key, getBigUint64, parseBigInt } from '../utils/index.js'
 
-import { hierarchyItemLength } from './constants'
+import { hierarchyItemLength } from './constants.js'
 
 export declare namespace Hierarchy {
   export type Node = {

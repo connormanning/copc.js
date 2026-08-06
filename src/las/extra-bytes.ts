@@ -1,4 +1,4 @@
-import { Binary, Dimension, getBigUint64, parseBigInt } from '../utils'
+import { Binary, Dimension, getBigUint64, parseBigInt } from '../utils/index.js'
 
 export namespace ExtraBytes {
   export type Options = {

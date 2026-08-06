@@ -1,10 +1,10 @@
 // Note that everything here is implicitly referring to LAS 1.4 - no other
 // versions are supported by these utilities.
-export * as Constants from './constants'
-export { Dimensions } from './dimensions'
-export { ExtraBytes } from './extra-bytes'
-export { Extractor } from './extractor'
-export { Header } from './header'
-export { PointData } from './point-data'
-export { View } from './view'
-export { Vlr } from './vlr'
+export * as Constants from './constants.js'
+export { Dimensions } from './dimensions.js'
+export { ExtraBytes } from './extra-bytes.js'
+export { Extractor } from './extractor.js'
+export { Header } from './header.js'
+export { PointData } from './point-data.js'
+export { View } from './view.js'
+export { Vlr } from './vlr.js'

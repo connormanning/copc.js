@@ -1,4 +1,4 @@
-import { BaseHierarchy } from '../utils'
+import { BaseHierarchy } from '../utils/index.js'
 
 export type Hierarchy = Record<string, number | undefined>
 

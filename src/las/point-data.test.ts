@@ -1,11 +1,11 @@
 import { promises as fs } from 'fs'
 import { join } from 'path'
 
-import * as Las from 'las'
-import * as Test from 'test'
-import { Getter } from 'utils'
+import * as Las from './index.js'
+import * as Test from '../test/index.js'
+import { Getter } from '../utils/index.js'
 
-import { decompressChunk, decompressFile } from './point-data'
+import { decompressChunk, decompressFile } from './point-data.js'
 
 const chunkTableAdjustment = 8
 

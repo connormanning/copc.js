@@ -1,5 +1,5 @@
-import { Binary, Point } from 'utils'
-import { View } from './view'
+import { Binary, Point } from '../utils/index.js'
+import { View } from './view.js'
 
 const X = 100
 const Y = 200

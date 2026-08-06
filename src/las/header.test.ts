@@ -1,6 +1,6 @@
-import { Point } from 'utils'
+import { Point } from '../utils/index.js'
 
-import { Header } from '.'
+import { Header } from './index.js'
 
 test('header', () => {
   const fileSignature = 'LASF'

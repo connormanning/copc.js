@@ -1,7 +1,7 @@
-import { Binary, Point, getBigUint64, parseBigInt } from '../utils'
+import { Binary, Point, getBigUint64, parseBigInt } from '../utils/index.js'
 
-import { minHeaderLength } from './constants'
-import { formatGuid, parsePoint } from './utils'
+import { minHeaderLength } from './constants.js'
+import { formatGuid, parsePoint } from './utils.js'
 
 export declare namespace Header {}
 export type Header = {

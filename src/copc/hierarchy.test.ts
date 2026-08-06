@@ -1,6 +1,6 @@
-import { Key } from 'utils'
+import { Key } from '../utils/index.js'
 
-import { Hierarchy } from './hierarchy'
+import { Hierarchy } from './hierarchy.js'
 
 type Pack = {
   key: Key

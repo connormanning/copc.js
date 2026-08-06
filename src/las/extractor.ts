@@ -3,10 +3,9 @@ import {
   Scale,
   getBigUint64,
   parseBigInt,
-} from '../utils'
-
-import { ExtraBytes } from './extra-bytes'
-import { Header } from './header'
+} from '../utils/index.js'
+import { ExtraBytes } from './extra-bytes.js'
+import { Header } from './header.js'
 
 export declare namespace Extractor {
   export type Map = ExtractorType.Map

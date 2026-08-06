@@ -1,9 +1,9 @@
 import type { LazPerf } from 'laz-perf'
-import * as Las from '../las'
-import { Binary, Getter } from '../utils'
+import * as Las from '../las/index.js'
+import { Binary, Getter } from '../utils/index.js'
 
-import { Hierarchy } from './hierarchy'
-import { Info } from './info'
+import { Hierarchy } from './hierarchy.js'
+import { Info } from './info.js'
 
 export type Copc = {
   header: Las.Header

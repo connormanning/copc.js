@@ -1,5 +1,5 @@
-import { Binary, Point } from 'utils'
-import { Extractor } from './extractor'
+import { Binary, Point } from '../utils/index.js'
+import { Extractor } from './extractor.js'
 
 const X = 100
 const Y = 200

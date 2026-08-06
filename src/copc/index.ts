@@ -1,4 +1,4 @@
-export * as Constants from './constants'
-export { Copc } from './copc'
-export { Hierarchy } from './hierarchy'
-export { Info } from './info'
+export * as Constants from './constants.js'
+export { Copc } from './copc.js'
+export { Hierarchy } from './hierarchy.js'
+export { Info } from './info.js'

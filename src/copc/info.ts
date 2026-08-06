@@ -1,7 +1,7 @@
-import { Bounds, Binary, Point, getBigUint64, parseBigInt } from '../utils'
+import { Bounds, Binary, Point, getBigUint64, parseBigInt } from '../utils/index.js'
 
-import { infoLength } from './constants'
-import type { Hierarchy } from './hierarchy'
+import { infoLength } from './constants.js'
+import type { Hierarchy } from './hierarchy.js'
 
 export type Info = {
   cube: Bounds

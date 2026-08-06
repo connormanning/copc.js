@@ -1,7 +1,7 @@
 import { LazPerf, createLazPerf } from 'laz-perf'
-import { Binary } from '../utils'
+import { Binary } from '../utils/index.js'
 
-import { Header } from './header'
+import { Header } from './header.js'
 
 export declare namespace PointData {}
 export type PointData = {}

@@ -1,7 +1,7 @@
-import { Binary, Getter, getBigUint64, parseBigInt } from '../utils'
+import { Binary, Getter, getBigUint64, parseBigInt } from '../utils/index.js'
 
-import { Header } from './header'
-import { evlrHeaderLength, vlrHeaderLength } from './constants'
+import { Header } from './header.js'
+import { evlrHeaderLength, vlrHeaderLength } from './constants.js'
 
 export type Vlr = {
   userId: string

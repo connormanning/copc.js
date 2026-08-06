@@ -1,6 +1,6 @@
-import { Point } from './point'
-import { Key } from './key'
-import { Step } from './step'
+import { Point } from './point.js'
+import { Key } from './key.js'
+import { Step } from './step.js'
 
 export type Bounds = [...Point, ...Point]
 export const Bounds = {

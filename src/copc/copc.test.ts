@@ -1,7 +1,7 @@
-import { ellipsoidFilename } from 'test'
+import { ellipsoidFilename } from '../test/index.js'
 
-import type { Dimension } from 'utils'
-import { Copc } from '.'
+import type { Dimension } from '../utils/index.js'
+import { Copc } from './index.js'
 
 const filename = ellipsoidFilename
 

@@ -1,5 +1,5 @@
-import { Getter } from 'utils'
-import { Vlr } from '.'
+import { Getter } from '../utils/index.js'
+import { Vlr } from './index.js'
 
 const header: Vlr.OffsetInfo = {
   headerLength: 50,

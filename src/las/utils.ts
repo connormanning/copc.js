@@ -1,4 +1,4 @@
-import { Binary, Point } from '../utils'
+import { Binary, Point } from '../utils/index.js'
 
 export function parsePoint(buffer: Binary): Point {
   const dv = Binary.toDataView(buffer)
