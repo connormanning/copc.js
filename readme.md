@@ -9,6 +9,8 @@ A TypeScript library for reading and parsing [COPC](https://copc.io/) data.
 
 ### Initialize a COPC object
 ```typescript
+import { Copc } from 'copc'
+
 // Can also pass a getter instead of a filename string.
 const copc = await Copc.create(filename)
 console.log(copc)
